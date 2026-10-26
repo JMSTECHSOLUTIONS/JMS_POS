@@ -179,17 +179,21 @@
 
             <!-- Right: Interactive Cart Panel -->
             <div class="w-full md:w-[380px] lg:w-[420px] bg-white flex flex-col h-full shadow-xl z-10 border-l border-slate-200">
-                <div class="p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-                    <div class="flex items-center space-x-2">
-                        <i class="fa-solid fa-cart-shopping text-indigo-600"></i>
-                        <h2 class="font-bold text-slate-800 text-sm sm:text-base">Current Order</h2>
-                        <span id="cart-item-count" class="bg-indigo-100 text-indigo-700 text-xs font-semibold px-2 py-0.5 rounded-full">0 items</span>
-                    </div>
-                    <button onclick="clearCart()" class="text-xs text-rose-500 hover:text-rose-700 font-medium flex items-center space-x-1 cursor-pointer">
-                        <i class="fa-solid fa-trash-can"></i>
-                        <span>Clear</span>
+                
+                <!-- MOBILE VIEW SWITCHER BUTTONS (Lalabas lang sa Phone / Android / iOS) -->
+                <div class="flex items-center gap-2 p-3 bg-slate-100 border-b border-slate-200 md:hidden overflow-x-auto scrollbar-none">
+                    <button onclick="switchMobileTab('products')" id="mobile-tab-products" class="flex-1 min-w-[110px] bg-indigo-600 text-white py-2 px-3 rounded-xl font-medium text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-box"></i> Products
+                    </button>
+                    <button onclick="switchMobileTab('cart')" id="mobile-tab-cart" class="flex-1 min-w-[110px] bg-slate-800 text-white py-2 px-3 rounded-xl font-medium text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                        <i class="fa-solid fa-cart-shopping"></i> Cart
+                    </button>
+                    <button onclick="openCameraScanner()" class="bg-emerald-600 text-white py-2 px-3 rounded-xl font-medium text-xs flex items-center justify-center gap-1 shadow-sm cursor-pointer" title="Scan Barcode">
+                        <i class="fa-solid fa-barcode"></i> Scan
                     </button>
                 </div>
+
+                <div class="p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
 
                 <div class="px-3 sm:px-4 py-2.5 bg-white border-b border-slate-200 flex gap-2 relative" style="z-index: 50;">
                     <button type="button" onclick="holdCurrentOrder()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2.5 rounded-xl shadow transition-all flex items-center justify-center space-x-1.5 cursor-pointer">
@@ -1468,6 +1472,25 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 console.log("Firebase Connected Successfully to JmsPOS!");
 
+
+function switchMobileTab(tab) {
+    const productsView = document.querySelector('#view-pos > div:first-child');
+    const cartView = document.querySelector('#view-pos > div:last-child');
+    const btnProducts = document.getElementById('mobile-tab-products');
+    const btnCart = document.getElementById('mobile-tab-cart');
+
+    if (tab === 'products') {
+        productsView.classList.remove('mobile-hidden');
+        cartView.classList.add('mobile-hidden');
+        btnProducts.className = "flex-1 min-w-[110px] bg-indigo-600 text-white py-2 px-3 rounded-xl font-medium text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer";
+        btnCart.className = "flex-1 min-w-[110px] bg-slate-800 text-white py-2 px-3 rounded-xl font-medium text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer";
+    } else {
+        productsView.classList.add('mobile-hidden');
+        cartView.classList.remove('mobile-hidden');
+        btnCart.className = "flex-1 min-w-[110px] bg-indigo-600 text-white py-2 px-3 rounded-xl font-medium text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer";
+        btnProducts.className = "flex-1 min-w-[110px] bg-slate-800 text-white py-2 px-3 rounded-xl font-medium text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer";
+    }
+}
 
 
 
