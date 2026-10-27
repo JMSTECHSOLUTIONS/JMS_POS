@@ -21,113 +21,85 @@
     <!-- Chart.js para sa Visual Sales Analytics Graph -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
     <style>
+        /* --- DARK MODE GLOBAL OVERRIDES PARA SA LAHAT NG TABS --- */
+        body.dark-mode button[onclick*="Today"],
+        body.dark-mode button[onclick*="today"],
+        body.dark-mode button:not([class*="bg-indigo"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-emerald"]) {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+            border-color: #334155 !important;
+        }
 
+        body.dark-mode .bg-slate-100,
+        body.dark-mode .bg-gray-100,
+        body.dark-mode .bg-slate-200 {
+            background-color: #1e293b !important;
+            color: #cbd5e1 !important;
+            border-color: #334155 !important;
+        }
 
-/* --- DARK MODE GLOBAL OVERRIDES PARA SA LAHAT NG TABS --- */
+        body.dark-mode .bg-slate-100 span,
+        body.dark-mode .bg-slate-100 *,
+        body.dark-mode .bg-gray-100 *,
+        body.dark-mode button:not(.bg-indigo-600):not(.bg-purple-600):not(.bg-blue-600) {
+            color: #e2e8f0;
+        }
 
-body.dark-mode button {
-    /* Kung ang button ay naglalaman ng text na 'Today' o may puting background */
-}
-body.dark-mode button[onclick*="Today"],
-body.dark-mode button[onclick*="today"],
-body.dark-mode button:not([class*="bg-indigo"]):not([class*="bg-purple"]):not([class*="bg-blue"]):not([class*="bg-emerald"]) {
-    background-color: #1e293b !important;
-    color: #f8fafc !important;
-    border-color: #334155 !important;
-}
+        body.dark-mode .bg-rose-50, body.dark-mode .bg-red-50 {
+            background-color: rgba(239, 68, 68, 0.2) !important;
+            color: #f87171 !important;
+        }
 
+        body.dark-mode .bg-amber-50, body.dark-mode .bg-yellow-50 {
+            background-color: rgba(245, 158, 11, 0.2) !important;
+            color: #fbbf24 !important;
+        }
 
-/* Mga inactive category pills at sub-tab buttons na kulay gray/white dati */
-body.dark-mode .bg-slate-100,
-body.dark-mode .bg-gray-100,
-body.dark-mode .bg-slate-200 {
-    background-color: #1e293b !important;
-    color: #cbd5e1 !important;
-    border-color: #334155 !important;
-}
+        body.dark-mode .bg-emerald-50, body.dark-mode .bg-green-50 {
+            background-color: rgba(16, 185, 129, 0.2) !important;
+            color: #34d399 !important;
+        }
 
-/* Text color para sa mga inactive buttons at tabs sa dark mode */
-body.dark-mode .bg-slate-100 span,
-body.dark-mode .bg-slate-100 *,
-body.dark-mode .bg-gray-100 *,
-body.dark-mode button:not(.bg-indigo-600):not(.bg-purple-600):not(.bg-blue-600) {
-    color: #e2e8f0;
-}
+        body.dark-mode {
+            background-color: #020617 !important;
+            color: #f8fafc !important;
+        }
+        body.dark-mode .bg-white, body.dark-mode .bg-slate-50 {
+            background-color: #0f172a !important;
+            color: #f8fafc !important;
+            border-color: #1e293b !important;
+        }
+        body.dark-mode .text-slate-900, body.dark-mode .text-slate-800,
+        body.dark-mode .text-slate-700, body.dark-mode .text-slate-600 {
+            color: #f1f5f9 !important;
+        }
+        body.dark-mode .text-slate-500, body.dark-mode .text-slate-400 {
+            color: #94a3b8 !important;
+        }
+        body.dark-mode input:not([type="checkbox"]), body.dark-mode select {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+            border-color: #334155 !important;
+        }
+        body.dark-mode table thead tr {
+            background-color: #1e293b !important;
+            color: #cbd5e1 !important;
+        }
+        body.dark-mode table tbody tr:hover {
+            background-color: #172554 !important;
+        }
 
-/* Para sa mga icon buttons o action buttons na may soft/light background (tulad ng delete/trash) */
-body.dark-mode .bg-rose-50,
-body.dark-mode .bg-red-50 {
-    background-color: rgba(239, 68, 68, 0.2) !important;
-    color: #f87171 !important;
-}
-
-body.dark-mode .bg-amber-50,
-body.dark-mode .bg-yellow-50 {
-    background-color: rgba(245, 158, 11, 0.2) !important;
-    color: #fbbf24 !important;
-}
-
-body.dark-mode .bg-emerald-50,
-body.dark-mode .bg-green-50 {
-    background-color: rgba(16, 185, 129, 0.2) !important;
-    color: #34d399 !important;
-}
-
-
-body.dark-mode {
-    background-color: #020617 !important;
-    color: #f8fafc !important;
-}
-body.dark-mode .bg-white,
-body.dark-mode .bg-slate-50 {
-    background-color: #0f172a !important;
-    color: #f8fafc !important;
-    border-color: #1e293b !important;
-}
-body.dark-mode .text-slate-900,
-body.dark-mode .text-slate-800,
-body.dark-mode .text-slate-700,
-body.dark-mode .text-slate-600 {
-    color: #f1f5f9 !important;
-}
-body.dark-mode .text-slate-500,
-body.dark-mode .text-slate-400 {
-    color: #94a3b8 !important;
-}
-body.dark-mode .border-slate-200,
-body.dark-mode .border-slate-100,
-body.dark-mode .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
-body.dark-mode .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
-    border-color: #1e293b !important;
-}
-body.dark-mode input:not([type="checkbox"]), 
-body.dark-mode select {
-    background-color: #1e293b !important;
-    color: #ffffff !important;
-    border-color: #334155 !important;
-}
-body.dark-mode table thead tr {
-    background-color: #1e293b !important;
-    color: #cbd5e1 !important;
-}
-body.dark-mode table tbody tr:hover {
-    background-color: #172554 !important;
-}
-
-
-
-
-
-html, body {
-    height: 100%;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-}
-
-
-
+        html, body {
+            height: 100%;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+        }
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -139,13 +111,11 @@ html, body {
             #printable-receipt { position: absolute; left: 0; top: 0; width: 100%; }
             #report-summary-modal * { visibility: visible; }
         }
-
-header nav {
+        header nav {
             flex-wrap: wrap;
             max-width: 100%;
             overflow-x: auto;
         }
-
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -161,8 +131,7 @@ header nav {
                 font-size: 11px;
             }
         }
-
-.slide-item {
+        .slide-item {
             transition: opacity 1s ease-in-out;
         }
         .slide-item.opacity-0 {
@@ -175,7 +144,6 @@ header nav {
             visibility: visible;
             pointer-events: auto;
         }
-
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
@@ -207,14 +175,13 @@ header nav {
                 </div>
             </div>
 
-<!-- BAGONG HTML SNIPPET NA ILALAGAY -->
             <div class="pt-4 animate-bounce px-2">
                 <span class="inline-flex items-center justify-center bg-indigo-600/30 border border-indigo-500/50 text-indigo-300 px-4 py-2.5 rounded-2xl text-[11px] sm:text-sm font-semibold shadow-lg text-center leading-relaxed">
                     <i class="fa-solid fa-computer-mouse mr-2 shrink-0"></i> 
                     <span>I-click kahit saan o pindutin ang <kbd class="bg-indigo-900 px-1.5 py-0.5 rounded text-white font-mono">ENTER</kbd> para mag-login</span>
                 </span>
             </div>
-    </div>
+        </div>
     </div>
 
     <header class="bg-slate-900 text-white shadow-md z-20 flex items-center justify-between px-4 sm:px-6 py-3">
@@ -229,9 +196,7 @@ header nav {
         </div>
 
         <nav class="flex space-x-1 sm:space-x-2 bg-slate-800 p-1 rounded-xl border border-slate-700">
-            
-
-		<button onclick="switchTab('pos')" id="nav-pos" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all bg-indigo-600 text-white shadow-sm flex items-center space-x-1.5 cursor-pointer">
+            <button onclick="switchTab('pos')" id="nav-pos" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all bg-indigo-600 text-white shadow-sm flex items-center space-x-1.5 cursor-pointer">
                 <i class="fa-solid fa-store"></i>
                 <span class="hidden md:inline">Cashier POS</span>
             </button>
@@ -243,23 +208,14 @@ header nav {
                 <i class="fa-solid fa-chart-line"></i>
                 <span class="hidden md:inline">Sales Reports</span>
             </button>
-            <!-- EXPENSES TAB ADD-ON -->
             <button onclick="switchTab('expenses')" id="nav-expenses" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 flex items-center space-x-1.5 cursor-pointer">
                 <i class="fa-solid fa-wallet text-amber-400"></i>
                 <span class="hidden md:inline">Expenses</span>
             </button>
-
-
-
-
-
-
-            <!-- ADMIN ONLY: STAFF MEAL WALLET -->
             <button onclick="openStaffMealModal()" id="nav-staff-meal" class="hidden px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 items-center space-x-1.5 cursor-pointer">
                 <i class="fa-solid fa-id-card"></i>
                 <span class="hidden md:inline">Staff Points</span>
             </button>
-            <!-- ADMIN ONLY: ATTENDANCE & ACCOUNTS -->
             <button onclick="openAttendanceModal()" id="nav-attendance" class="hidden px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 items-center space-x-1.5 cursor-pointer">
                 <i class="fa-solid fa-user-clock"></i>
                 <span class="hidden md:inline">Attendance</span>
@@ -285,6 +241,16 @@ header nav {
             <button onclick="logout()" title="Mag-logout o Mag-break" class="bg-slate-800 hover:bg-rose-900/40 text-slate-300 hover:text-rose-400 border border-slate-700 p-2 rounded-xl transition-all text-xs flex items-center space-x-1 cursor-pointer">
                 <i class="fa-solid fa-right-from-bracket"></i>
             </button>
+
+            <div class="flex items-center space-x-3 border-l border-slate-700 pl-3">
+                <button onclick="toggleDarkMode()" title="I-toggle ang Dark / Light Mode" class="bg-slate-800 hover:bg-slate-700 text-amber-400 p-2 rounded-xl transition-all text-xs flex items-center justify-center cursor-pointer shadow">
+                    <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
+                </button>
+                <div class="text-right hidden xl:block">
+                    <div class="text-[11px] font-bold text-indigo-400">JmsPOS v1.2</div>
+                    <div class="text-[9px] text-slate-400">JMS Tech Solutions</div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -293,7 +259,7 @@ header nav {
         <!-- VIEW 1: POS CASHIER INTERFACE -->
         <div id="view-pos" class="w-full h-full flex flex-col md:flex-row relative">
             
-            <!-- MOBILE VIEW SWITCHER BUTTONS (Makikita lang sa Phone) -->
+            <!-- MOBILE VIEW SWITCHER BUTTONS -->
             <div class="flex md:hidden bg-slate-900 p-2 gap-2 z-10 sticky top-0">
                 <button type="button" onclick="switchMobileTab('products')" id="mobile-tab-products" class="flex-1 bg-indigo-600 text-white py-2 px-3 rounded-xl font-medium text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
                     <i class="fa-solid fa-boxes-stacked"></i> View Products & Search
@@ -322,8 +288,7 @@ header nav {
                 </div>
 
                 <div class="flex-1 overflow-y-auto p-3 sm:p-4 pb-20 md:pb-4">
-                    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-                    </div>
+                    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"></div>
                     <div id="no-products" class="hidden flex flex-col items-center justify-center h-64 text-slate-400">
                         <i class="fa-solid fa-box-open text-4xl mb-2"></i>
                         <p class="text-sm">Walang nakitang produkto.</p>
@@ -331,9 +296,8 @@ header nav {
                 </div>
             </div>
 
-      
             <!-- Right: Interactive Cart Panel -->
-            <div class="w-full md:w-[380px] lg:w-[420px] bg-white flex flex-col h-full shadow-xl z-10 border-l border-slate-200">
+            <div id="mobile-cart-panel" class="hidden md:flex w-full md:w-[380px] lg:w-[420px] bg-white flex-col h-full shadow-xl z-10 border-l border-slate-200">
                 <div class="p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-cart-shopping text-indigo-600"></i>
@@ -357,8 +321,7 @@ header nav {
                     </button>
                 </div>
 
-                <div id="cart-items-container" class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 divide-y divide-slate-100">
-                </div>
+                <div id="cart-items-container" class="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 divide-y divide-slate-100"></div>
                 <div id="cart-empty" class="flex-1 flex flex-col items-center justify-center text-slate-400 p-8">
                     <i class="fa-solid fa-basket-shopping text-4xl mb-2 text-slate-300"></i>
                     <p class="text-sm font-medium text-slate-500">Cart is empty</p>
@@ -366,7 +329,6 @@ header nav {
                 </div>
 
                 <div class="p-3 sm:p-4 bg-slate-50 border-t border-slate-200 space-y-3">
-                    <!-- TAX TOGGLE & DISCOUNT OPTIONS BAR -->
                     <div class="bg-white p-2.5 rounded-xl border border-slate-200 space-y-2 text-xs">
                         <div class="flex justify-between items-center">
                             <label class="flex items-center space-x-2 cursor-pointer select-none">
@@ -384,7 +346,7 @@ header nav {
                                         <option value="specific">Specific Product Only</option>
                                     </select>
                                 </div>
-                                <button type="button" onclick="openAddDiscountModal()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold px-2.5 py-1.5 rounded-lg text-xs whitespace-nowrap cursor-pointer flex items-center gap-1 border border-indigo-200" title="Magdagdag ng sariling discount">
+                                <button type="button" onclick="openAddDiscountModal()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold px-2.5 py-1.5 rounded-lg text-xs whitespace-nowrap cursor-pointer flex items-center gap-1 border border-indigo-200">
                                     <i class="fa-solid fa-plus"></i> Add
                                 </button>
                             </div>
@@ -400,7 +362,6 @@ header nav {
                                 </div>
                             </div>
 
-                            <!-- SPECIFIC PRODUCT SELECTOR -->
                             <div id="specific-product-container" class="hidden pt-1">
                                 <select id="specific-discount-item-id" onchange="handleSpecificItemChange()" class="w-full bg-amber-50/50 border border-amber-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:ring-2 focus:ring-amber-500">
                                     <option value="">-- Piliin ang Item na Didiskwento --</option>
@@ -408,9 +369,8 @@ header nav {
                             </div>
                         </div>
 
-                        <!-- DISCOUNT BENEFICIARY NAME CONTAINER -->
                         <div id="discount-beneficiary-container" class="hidden pt-1">
-                            <input type="text" id="discount-beneficiary-name" oninput="formatBeneficiaryName(this)" placeholder="Pangalan ng nagpapadiscount (Ex. Jimmy Canciller)..." class="w-full bg-indigo-50/50 border border-indigo-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:ring-2 focus:ring-indigo-500">
+                            <input type="text" id="discount-beneficiary-name" oninput="formatBeneficiaryName(this)" placeholder="Pangalan ng nagpapadiscount..." class="w-full bg-indigo-50/50 border border-indigo-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700 font-medium focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
 
@@ -449,7 +409,6 @@ header nav {
                     <p class="text-xs sm:text-sm text-slate-500">Track stock levels, best-selling products, and items nearing expiration.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <!-- EXCEL / CSV IMPORT BUTTON -->
                     <label class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-3 py-2 rounded-xl shadow-md transition-all flex items-center space-x-1.5 cursor-pointer">
                         <i class="fa-solid fa-file-excel"></i>
                         <span>Import Excel (CSV)</span>
@@ -471,7 +430,6 @@ header nav {
                 </div>
             </div>
 
-            <!-- INVENTORY SUB-TABS -->
             <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
                 <button onclick="switchInventoryTab('all')" id="inv-tab-all" class="px-4 py-2 text-xs font-semibold rounded-xl bg-indigo-600 text-white transition-all cursor-pointer shadow-sm">All Products</button>
                 <button onclick="switchInventoryTab('bestseller')" id="inv-tab-bestseller" class="px-4 py-2 text-xs font-semibold rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 transition-all cursor-pointer flex items-center gap-1.5"><i class="fa-solid fa-fire text-amber-500"></i> Best Sellers & Low Stock</button>
@@ -501,17 +459,13 @@ header nav {
                                 <th class="p-3 sm:p-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="inventory-table-body" class="divide-y divide-slate-100">
-                        </tbody>
+                        <tbody id="inventory-table-body" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- SUB-TAB 2: BEST SELLERS & LOW STOCK -->
+            <!-- SUB-TAB 2: BEST SELLERS -->
             <div id="sub-inv-bestseller" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col pb-4">
-                <div class="p-3 sm:p-4 bg-slate-50 border-b border-slate-200 font-semibold text-slate-700 text-xs sm:text-sm flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-fire text-amber-500"></i> Best-Selling & Low-Stock Products (Fast-Moving & Low Stock)
-                </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs sm:text-sm">
                         <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
@@ -523,17 +477,13 @@ header nav {
                                 <th class="p-3 sm:p-4 text-center">Remaining Stock</th>
                             </tr>
                         </thead>
-                        <tbody id="inventory-bestseller-tbody" class="divide-y divide-slate-100">
-                        </tbody>
+                        <tbody id="inventory-bestseller-tbody" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- SUB-TAB 3: NEAR EXPIRY ALERTS -->
+            <!-- SUB-TAB 3: NEAR EXPIRY -->
             <div id="sub-inv-expiry" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col pb-4">
-                <div class="p-3 sm:p-4 bg-slate-50 border-b border-slate-200 font-semibold text-slate-700 text-xs sm:text-sm flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation text-rose-500"></i> Products Nearing Expiration or Already Expired (90-Day Alert)
-                </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs sm:text-sm">
                         <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
@@ -546,8 +496,7 @@ header nav {
                                 <th class="p-3 sm:p-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="inventory-expiry-tbody" class="divide-y divide-slate-100">
-                        </tbody>
+                        <tbody id="inventory-expiry-tbody" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
@@ -569,12 +518,10 @@ header nav {
                         <i class="fa-solid fa-lock"></i>
                         <span>Z-Read</span>
                     </button>
-		
                     <button onclick="exportCompanyExecutiveReportExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition-all flex items-center space-x-1.5 cursor-pointer">
                         <i class="fa-solid fa-file-excel"></i>
                         <span>Export Company Report with Date</span>
                     </button>
-
                     <button onclick="exportSalesCSV()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium text-xs px-3 sm:px-4 py-2.5 rounded-xl shadow-sm transition-all flex items-center space-x-1.5 cursor-pointer">
                         <i class="fa-solid fa-download"></i>
                         <span>Daily Sales T.R</span>
@@ -586,14 +533,12 @@ header nav {
                 </div>
             </div>
 
-            <!-- DUAL VISUAL SALES ANALYTICS CHARTS -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
                     <div>
                         <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-2">
                             <i class="fa-solid fa-calendar-day text-indigo-600"></i> Daily Sales Performance (Araw ng Buwan)
                         </h3>
-                        <p class="text-[11px] text-slate-500 mt-0.5">Total Daily Sales for the Current Month.</p>
                     </div>
                     <div class="h-48 sm:h-56 relative flex items-center justify-center bg-slate-50 p-2 rounded-xl border border-slate-100 mt-3">
                         <canvas id="dailySalesChart"></canvas>
@@ -605,7 +550,6 @@ header nav {
                         <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-2">
                             <i class="fa-solid fa-calendar-week text-emerald-600"></i> Sales Performance by Day of Week
                         </h3>
-                        <p class="text-[11px] text-slate-500 mt-0.5">Sales Comparison by Day of the Week (Sunday–Saturday).</p>
                     </div>
                     <div class="h-48 sm:h-56 relative flex items-center justify-center bg-slate-50 p-2 rounded-xl border border-slate-100 mt-3">
                         <canvas id="weeklySalesChart"></canvas>
@@ -613,34 +557,27 @@ header nav {
                 </div>
             </div>
 
-            <!-- ORGANIZED FILTER BAR WITH DATE RANGE CALENDAR -->
             <div class="bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex flex-wrap items-center gap-2 w-full md:w-auto">
                     <span class="text-xs font-semibold text-slate-600"><i class="fa-solid fa-calendar-days text-indigo-600"></i> Date Range:</span>
-                    
                     <div class="flex items-center gap-1.5">
-                        <input type="date" id="report-start-date" onchange="applyGlobalReportFilter()" class="px-2.5 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500" title="Start Date">
+                        <input type="date" id="report-start-date" onchange="applyGlobalReportFilter()" class="px-2.5 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
                         <span class="text-slate-400 text-xs">to</span>
-                        <input type="date" id="report-end-date" onchange="applyGlobalReportFilter()" class="px-2.5 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500" title="End Date">
+                        <input type="date" id="report-end-date" onchange="applyGlobalReportFilter()" class="px-2.5 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs font-medium focus:ring-2 focus:ring-indigo-500">
                     </div>
-
                     <button onclick="setQuickReportFilter('today')" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs px-3 py-1.5 rounded-lg transition-all cursor-pointer">Today</button>
                     <button onclick="resetGlobalReportFilter()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium text-xs px-3 py-1.5 rounded-lg transition-all cursor-pointer">Show All</button>
                 </div>
 
-                <div class="flex flex-wrap gap-2 text-xs font-semibold w-full md:w-auto justify-end items-center" id="dynamic-payment-summaries">
-                    <!-- Dynamic payment summaries rendered via JS -->
-                </div>
+                <div class="flex flex-wrap gap-2 text-xs font-semibold w-full md:w-auto justify-end items-center" id="dynamic-payment-summaries"></div>
             </div>
 
-            <!-- REPORT SUB-TABS -->
             <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
                 <button onclick="switchReportTab('transactions')" id="rep-tab-transactions" class="px-4 py-2 text-xs font-semibold rounded-xl bg-indigo-600 text-white transition-all cursor-pointer shadow-sm">Transactions</button>
                 <button onclick="switchReportTab('items')" id="rep-tab-items" class="px-4 py-2 text-xs font-semibold rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 transition-all cursor-pointer">Items Sold & Profit</button>
                 <button onclick="switchReportTab('audit')" id="rep-tab-audit" class="px-4 py-2 text-xs font-semibold rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 transition-all cursor-pointer">Audit Trail</button>
             </div>
 
-            <!-- SUB-TAB 1: TRANSACTIONS -->
             <div id="sub-rep-transactions" class="space-y-4 pb-4">
                 <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
                     <div class="p-3 sm:p-4 border-b border-slate-200 bg-slate-50 font-semibold text-slate-700 flex justify-between items-center text-xs sm:text-sm">
@@ -660,18 +597,13 @@ header nav {
                                     <th class="p-3 text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="sales-table-body" class="divide-y divide-slate-100">
-                            </tbody>
+                            <tbody id="sales-table-body" class="divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- SUB-TAB 2: ITEMS SOLD & NET PROFIT -->
             <div id="sub-rep-items" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col pb-4">
-                <div class="p-3 sm:p-4 border-b border-slate-200 bg-slate-50 font-semibold text-slate-700 text-xs sm:text-sm">
-                    <span>Product Performance, Cost & Net Profit</span>
-                </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
                         <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
@@ -685,13 +617,11 @@ header nav {
                                 <th class="p-3 text-right text-emerald-600 font-bold">Net Profit (Tubo)</th>
                             </tr>
                         </thead>
-                        <tbody id="item-sold-table-body" class="divide-y divide-slate-100">
-                        </tbody>
+                        <tbody id="item-sold-table-body" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- SUB-TAB 3: AUDIT TRAIL -->
             <div id="sub-rep-audit" class="hidden bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col pb-4">
                 <div class="p-3 sm:p-4 border-b border-slate-200 bg-slate-50 font-semibold text-slate-700 text-xs sm:text-sm flex justify-between items-center">
                     <span>System Audit Trail</span>
@@ -707,14 +637,13 @@ header nav {
                                 <th class="p-3">Details</th>
                             </tr>
                         </thead>
-                        <tbody id="audit-table-body" class="divide-y divide-slate-100">
-                        </tbody>
+                        <tbody id="audit-table-body" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- VIEW 4: EXPENSES MODULE ADD-ON -->
+        <!-- VIEW 4: EXPENSES MODULE -->
         <div id="view-expenses" class="hidden w-full h-full flex flex-col bg-slate-50 overflow-y-auto p-4 sm:p-6 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
@@ -727,7 +656,6 @@ header nav {
                 </button>
             </div>
 
-            <!-- EXPENSES SUMMARY CARDS -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
                     <div>
@@ -752,7 +680,6 @@ header nav {
                 </div>
             </div>
 
-            <!-- EXPENSES TABLE -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col pb-4">
                 <div class="p-3 sm:p-4 border-b border-slate-200 bg-slate-50 font-semibold text-slate-700 text-xs sm:text-sm flex justify-between items-center">
                     <span>Expense Logs List</span>
@@ -770,16 +697,14 @@ header nav {
                                 <th class="p-3 sm:p-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="expenses-table-body" class="divide-y divide-slate-100">
-                        </tbody>
+                        <tbody id="expenses-table-body" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </main>
 
-    <!-- ADD EXPENSE MODAL -->
+    <!-- EXPENSES MODAL -->
     <div id="add-expense-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100">
             <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
@@ -802,7 +727,7 @@ header nav {
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Paglalarawan (Description)</label>
-                    <input type="text" id="expense-desc" required placeholder="e.g. Buwanang upa para sa buwan ng Oktubre" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-amber-500">
+                    <input type="text" id="expense-desc" required placeholder="e.g. Buwanang upa para sa Oktubre" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-amber-500">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
@@ -919,38 +844,35 @@ header nav {
             <form onsubmit="handleExternalCreateAccount(event)" class="space-y-4" autocomplete="off">
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Full Name (CAPSLOCK)</label>
-                    <input type="text" id="ext-reg-fullname" required oninput="this.value = this.value.toUpperCase()" placeholder="JUAN DELA CRUZ" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500 uppercase">
+                    <input type="text" id="ext-reg-fullname" required oninput="this.value = this.value.toUpperCase()" placeholder="JUAN DELA CRUZ" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white uppercase">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Username (e.g. Cashier03)</label>
-                    <input type="text" id="ext-reg-username" required autocomplete="off" placeholder="Cashier03" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500">
-                    <p id="ext-username-error" class="text-[10px] text-rose-400 mt-1 hidden">Dapat may minimum na 5 letra, 1 malaking titik, at 2 numero.</p>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Username</label>
+                    <input type="text" id="ext-reg-username" required autocomplete="off" placeholder="Cashier03" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white">
+                    <p id="ext-username-error" class="text-[10px] text-rose-400 mt-1 hidden">Dapat may 5+ letra, 1 malaking titik, at 2 numero.</p>
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Email</label>
-                    <input type="email" id="ext-reg-email" required placeholder="email@jmspos.com" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500">
+                    <input type="email" id="ext-reg-email" required placeholder="email@jmspos.com" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Password / PIN</label>
-                    <input type="password" id="ext-reg-password" required autocomplete="new-password" placeholder="••••••••" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500">
+                    <input type="password" id="ext-reg-password" required autocomplete="new-password" placeholder="••••••••" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white">
                 </div>
-
-<div>
-    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">License Key (Binigay ng Admin)</label>
-    <input type="text" id="ext-reg-license" required placeholder="JMS-XXXX-XXXX-XXXX" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white uppercase focus:ring-2 focus:ring-indigo-500 font-mono">
-</div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">License Key (Binigay ng Admin)</label>
+                    <input type="text" id="ext-reg-license" required placeholder="JMS-XXXX-XXXX-XXXX" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white uppercase font-mono">
+                </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Role</label>
-                    <select id="ext-reg-role" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:ring-2 focus:ring-indigo-500">
+                    <select id="ext-reg-role" class="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white">
                         <option value="Cashier">Cashier</option>
                         <option value="Admin">Admin</option>
                     </select>
                 </div>
                 <div class="flex gap-2 pt-2">
-                    <button type="button" onclick="closeExternalCreateAccountModal()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold py-3 rounded-xl text-xs transition-all cursor-pointer">
-                        Kanselahin
-                    </button>
-                    <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-indigo-600/30 text-xs transition-all flex items-center justify-center space-x-1 cursor-pointer">
+                    <button type="button" onclick="closeExternalCreateAccountModal()" class="flex-1 bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold py-3 rounded-xl text-xs cursor-pointer">Kanselahin</button>
+                    <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl text-xs cursor-pointer flex items-center justify-center space-x-1">
                         <i class="fa-solid fa-check"></i>
                         <span>Register Account</span>
                     </button>
@@ -972,26 +894,15 @@ header nav {
             <form onsubmit="verifyAdminAction(event)" class="p-6 space-y-4" autocomplete="off">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin Username</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
-                        <input type="text" id="admin-auth-user" required autocomplete="off" placeholder="Admin01" class="w-full pl-10 pr-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                    </div>
+                    <input type="text" id="admin-auth-user" required placeholder="Admin01" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Admin Password / PIN</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-key absolute left-3.5 top-3.5 text-slate-400 text-sm"></i>
-                        <input type="password" id="admin-auth-pin" required autocomplete="new-password" placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500">
-                    </div>
+                    <input type="password" id="admin-auth-pin" required placeholder="••••••••" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm">
                 </div>
                 <div class="flex gap-2 pt-2">
-                    <button type="button" onclick="closeAdminAuthModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl text-xs transition-all cursor-pointer">
-                        Kanselahin
-                    </button>
-                    <button type="submit" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-rose-600/30 text-xs transition-all flex items-center justify-center space-x-1 cursor-pointer">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Kumpirmahin</span>
-                    </button>
+                    <button type="button" onclick="closeAdminAuthModal()" class="flex-1 bg-slate-200 text-slate-700 font-semibold py-3 rounded-xl text-xs cursor-pointer">Kanselahin</button>
+                    <button type="submit" class="flex-1 bg-rose-600 text-white font-semibold py-3 rounded-xl text-xs cursor-pointer">Kumpirmahin</button>
                 </div>
             </form>
         </div>
@@ -1001,19 +912,17 @@ header nav {
     <div id="hold-name-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100">
             <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-pause text-amber-400"></i> I-hold ang Order
-                </h3>
+                <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-pause text-amber-400"></i> I-hold ang Order</h3>
                 <button onclick="closeHoldNameModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Pangalan / Note para sa Customer</label>
-                    <input type="text" id="hold-customer-name" placeholder="e.g. Table 3 o Juan" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <input type="text" id="hold-customer-name" placeholder="e.g. Table 3" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm">
                 </div>
                 <div class="flex gap-2 pt-1">
-                    <button type="button" onclick="closeHoldNameModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2.5 rounded-xl text-xs cursor-pointer">Kanselahin</button>
-                    <button type="button" onclick="confirmHoldOrder()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 rounded-xl text-xs shadow-md cursor-pointer">I-hold ang Pila (Enter)</button>
+                    <button type="button" onclick="closeHoldNameModal()" class="flex-1 bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs cursor-pointer">Kanselahin</button>
+                    <button type="button" onclick="confirmHoldOrder()" class="flex-1 bg-amber-500 text-white font-semibold py-2.5 rounded-xl text-xs cursor-pointer">I-hold (Enter)</button>
                 </div>
             </div>
         </div>
@@ -1023,51 +932,35 @@ header nav {
     <div id="held-orders-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col max-h-[80vh]">
             <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-list-check text-indigo-400"></i> Nakabinbing Pila (Held Orders)
-                </h3>
+                <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-list-check text-indigo-400"></i> Nakabinbing Pila</h3>
                 <button onclick="closeHeldOrdersModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="p-4 overflow-y-auto flex-1 space-y-3" id="held-orders-container">
-            </div>
+            <div class="p-4 overflow-y-auto flex-1 space-y-3" id="held-orders-container"></div>
             <div class="p-4 bg-slate-50 border-t border-slate-200 text-right">
-                <button onclick="closeHeldOrdersModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-xl text-xs cursor-pointer">
-                    Exit
-                </button>
+                <button onclick="closeHeldOrdersModal()" class="bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-xl text-xs cursor-pointer">Exit</button>
             </div>
         </div>
     </div>
 
-    <!-- STAFF MEAL POINTS WALLET MODAL (ADMIN ONLY) -->
+    <!-- STAFF MEAL POINTS MODAL -->
     <div id="staff-meal-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-slate-950 text-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden border border-slate-800 flex flex-col max-h-[90vh]">
             <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center border-b border-slate-800">
-                <h3 class="font-bold text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-id-card text-indigo-400"></i> Staff Meal Allowance Points Management (Admin Only)
-                </h3>
+                <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-id-card text-indigo-400"></i> Staff Meal Allowance Points Management</h3>
                 <button onclick="closeStaffMealModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div class="p-6 overflow-y-auto flex-1 space-y-6">
-                <!-- Add New Staff Form & Import/Export Buttons -->
                 <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-4">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-800 pb-3">
-                        <h4 class="font-bold text-xs uppercase tracking-wider text-indigo-400 flex items-center gap-1.5">
-                            <i class="fa-solid fa-user-plus"></i> Add or Import Staff for Points Wallet
-                        </h4>
+                        <h4 class="font-bold text-xs uppercase text-indigo-400"><i class="fa-solid fa-user-plus"></i> Add or Import Staff</h4>
                         <div class="flex flex-wrap gap-2">
-                            <label class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg shadow transition-all flex items-center space-x-1.5 cursor-pointer">
-                                <i class="fa-solid fa-file-excel"></i>
+                            <label class="bg-emerald-600 text-white text-xs font-semibold px-3 py-1.5 rounded-lg cursor-pointer">
                                 <span>Import (Excel/CSV)</span>
-                              <input type="file" id="import-staff-csv" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onchange="handleStaffImport(event)" class="hidden">
+                                <input type="file" id="import-staff-csv" accept=".csv, .xls, .xlsx" onchange="importStaffFromCSV(event)" class="hidden">
                             </label>
-                            <button onclick="exportStaffPointsExcel()" class="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow transition-all flex items-center space-x-1.5 cursor-pointer">
-                                <i class="fa-solid fa-file-excel"></i> Export Points (.xls)
-                            </button>
-<button onclick="downloadStaffTemplate()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1.5 rounded text-xs font-semibold flex items-center gap-1 cursor-pointer">
-        <i class="fa-solid fa-file-arrow-down"></i> Download Template
-    </button>
-
+                            <button onclick="exportStaffPointsExcel()" class="bg-sky-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">Export Points (.xls)</button>
+                            <button onclick="downloadStaffTemplate()" class="bg-slate-700 text-slate-200 px-3 py-1.5 rounded text-xs font-semibold cursor-pointer">Download Template</button>
                         </div>
                     </div>
                     
@@ -1078,64 +971,51 @@ header nav {
                             <input type="text" id="staff-name" required oninput="this.value = this.value.toUpperCase()" placeholder="JUAN CRUZ" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white uppercase">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Employee ID / Barcode</label>
+                            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Employee Barcode</label>
                             <input type="text" id="staff-barcode" required placeholder="EMP-1001" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white">
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Points Allowance (₱)</label>
-                            <input type="number" step="1" id="staff-points" required placeholder="1500" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white">
+                            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Points (₱)</label>
+                            <input type="number" id="staff-points" required placeholder="1500" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white">
                         </div>
                         <div class="flex gap-2">
-                            <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-lg text-xs transition-all shadow cursor-pointer">
-                                <i class="fa-solid fa-save"></i> Save Staff
-                            </button>
-                            <button type="button" onclick="resetStaffForm()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg text-xs cursor-pointer">Reset</button>
+                            <button type="submit" class="flex-1 bg-indigo-600 text-white font-semibold py-2 rounded-lg text-xs cursor-pointer">Save Staff</button>
+                            <button type="button" onclick="resetStaffForm()" class="bg-slate-800 text-slate-300 px-3 py-2 rounded-lg text-xs cursor-pointer">Reset</button>
                         </div>
                     </form>
                 </div>
 
-                <!-- Staff List Table Section -->
                 <div class="space-y-3 pt-1">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                        <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Registered Staff and Their Balances (Points = Pesos)</h4>
-                        <button onclick="resetAllStaffPointsMonthly()" class="bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-600/50 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">
-                            <i class="fa-solid fa-rotate"></i> Reset All Points to Monthly Quota
-                        </button>
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-xs uppercase text-slate-400">Registered Staff Balances</h4>
+                        <button onclick="resetAllStaffPointsMonthly()" class="bg-amber-600/30 text-amber-300 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">Reset All Monthly</button>
                     </div>
-                    
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs text-slate-300 border-collapse">
                             <thead class="bg-slate-900 text-slate-400">
                                 <tr>
                                     <th class="p-3">Full Name</th>
-                                    <th class="p-3">Employee Barcode / ID</th>
-                                    <th class="p-3 text-right">Current Points Balance</th>
+                                    <th class="p-3">Employee ID</th>
+                                    <th class="p-3 text-right">Points Balance</th>
                                     <th class="p-3 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="staff-table-body" class="divide-y divide-slate-800">
-                            </tbody>
+                            <tbody id="staff-table-body" class="divide-y divide-slate-800"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
-            <div class="p-4 bg-slate-900 border-t border-slate-800 flex justify-between items-center">
-                <span class="text-xs text-slate-400">*Only Admins Can Edit Staff Meal Points.</span>
-                <button onclick="closeStaffMealModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-xl text-xs cursor-pointer">
-                    Exit
-                </button>
+            <div class="p-4 bg-slate-900 border-t border-slate-800 text-right">
+                <button onclick="closeStaffMealModal()" class="bg-slate-800 text-slate-200 py-2 px-4 rounded-xl text-xs cursor-pointer">Exit</button>
             </div>
         </div>
     </div>
 
     <!-- CHECKOUT MODAL -->
     <div id="checkout-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 transform transition-all">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100">
             <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-lg flex items-center gap-2">
-                    <i class="fa-solid fa-cash-register text-indigo-400"></i> Checkout Payment
-                </h3>
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-cash-register text-indigo-400"></i> Checkout</h3>
                 <button onclick="closeCheckoutModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
@@ -1144,62 +1024,49 @@ header nav {
                     <div id="modal-total-display" class="text-3xl font-extrabold text-indigo-600 mt-1">₱0.00</div>
                 </div>
 
-                <!-- SPLIT PAYMENT CHECKBOX TOGGLE -->
                 <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 flex items-center justify-between">
                     <label class="flex items-center space-x-2 cursor-pointer select-none">
-                        <input type="checkbox" id="split-payment-checkbox" onchange="toggleSplitPayment()" class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                        <input type="checkbox" id="split-payment-checkbox" onchange="toggleSplitPayment()" class="w-4 h-4 text-indigo-600 rounded">
                         <span class="font-bold text-xs text-indigo-950 uppercase"><i class="fa-solid fa-arrows-split-up-and-left text-indigo-600 mr-1"></i> Enable Split Payment</span>
                     </label>
                     <span id="split-status-label" class="text-[10px] font-semibold text-slate-500">Hatiin ang Bayad</span>
                 </div>
 
-                <!-- STANDARD / SINGLE PAYMENT MODE -->
                 <div id="single-payment-section" class="space-y-4">
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
                             <label class="block text-xs font-semibold text-slate-600 uppercase">Payment Method</label>
                             <div class="flex gap-2">
-                                <button type="button" onclick="openManagePaymentModal()" class="text-slate-600 hover:text-slate-800 text-xs font-bold flex items-center gap-1 cursor-pointer">
-                                    <i class="fa-solid fa-gear"></i> Manage
-                                </button>
-                                <button type="button" onclick="openAddPaymentModal()" class="text-indigo-600 hover:text-indigo-700 text-xs font-bold flex items-center gap-1 cursor-pointer">
-                                    <i class="fa-solid fa-plus-circle"></i> Add
-                                </button>
+                                <button type="button" onclick="openManagePaymentModal()" class="text-slate-600 text-xs font-bold cursor-pointer">Manage</button>
+                                <button type="button" onclick="openAddPaymentModal()" class="text-indigo-600 text-xs font-bold cursor-pointer">Add</button>
                             </div>
                         </div>
-                        <div id="payment-methods-grid" class="grid grid-cols-3 gap-2">
-                            <!-- Rendered via JS -->
-                        </div>
+                        <div id="payment-methods-grid" class="grid grid-cols-3 gap-2"></div>
                     </div>
 
-                    <!-- STAFF MEAL POINTS SCANNER SECTION -->
                     <div id="staff-meal-payment-section" class="hidden bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-amber-900 flex items-center gap-1"><i class="fa-solid fa-id-card text-amber-600"></i> Staff Meal Points Payment</span>
+                            <span class="text-xs font-bold text-amber-900"><i class="fa-solid fa-id-card text-amber-600"></i> Staff Meal Points Payment</span>
                             <span id="staff-selected-name" class="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded">No Staff Selected</span>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Scan or Enter Staff Barcode/ID</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="staff-payment-barcode" oninput="verifyStaffBarcode(this.value)" placeholder="Scan or Enter Staff Barcode/ID..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs font-medium focus:ring-2 focus:ring-amber-500">
-                                <button type="button" onclick="openStaffScannerModal()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer">Scan Cam</button>
-                            </div>
+                            <input type="text" id="staff-payment-barcode" oninput="verifyStaffBarcode(this.value)" placeholder="Scan or Enter Staff Barcode/ID..." class="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs">
                         </div>
-                        <div class="flex justify-between items-center text-xs pt-1 border-t border-amber-200/60">
-                            <span class="text-slate-600">Remaining Points Balance:</span>
+                        <div class="flex justify-between items-center text-xs pt-1 border-t border-amber-200">
+                            <span>Remaining Points:</span>
                             <span id="staff-current-points-display" class="font-bold text-slate-900">₱0.00</span>
                         </div>
                     </div>
 
                     <div id="cash-input-container" class="space-y-2">
                         <label class="block text-xs font-semibold text-slate-600 uppercase">Cash Tendered (₱)</label>
-                        <input type="number" id="cash-tendered" oninput="calculateChange()" placeholder="Enter cash amount..." class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl font-bold text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="number" id="cash-tendered" oninput="calculateChange()" placeholder="Enter cash..." class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl font-bold text-lg">
                         <div class="flex gap-2 pt-1">
-                            <button type="button" onclick="addQuickCash(50)" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1.5 rounded-lg text-xs font-medium text-slate-700 cursor-pointer">₱50</button>
-                            <button type="button" onclick="addQuickCash(100)" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1.5 rounded-lg text-xs font-medium text-slate-700 cursor-pointer">₱100</button>
-                            <button type="button" onclick="addQuickCash(500)" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1.5 rounded-lg text-xs font-medium text-slate-700 cursor-pointer">₱500</button>
-                            <button type="button" onclick="addQuickCash(1000)" class="flex-1 bg-slate-100 hover:bg-slate-200 py-1.5 rounded-lg text-xs font-medium text-slate-700 cursor-pointer">₱1000</button>
-                            <button type="button" onclick="setExactCash()" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer">Exact</button>
+                            <button type="button" onclick="addQuickCash(50)" class="flex-1 bg-slate-100 py-1.5 rounded-lg text-xs cursor-pointer">₱50</button>
+                            <button type="button" onclick="addQuickCash(100)" class="flex-1 bg-slate-100 py-1.5 rounded-lg text-xs cursor-pointer">₱100</button>
+                            <button type="button" onclick="addQuickCash(500)" class="flex-1 bg-slate-100 py-1.5 rounded-lg text-xs cursor-pointer">₱500</button>
+                            <button type="button" onclick="addQuickCash(1000)" class="flex-1 bg-slate-100 py-1.5 rounded-lg text-xs cursor-pointer">₱1000</button>
+                            <button type="button" onclick="setExactCash()" class="bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg text-xs cursor-pointer">Exact</button>
                         </div>
                     </div>
 
@@ -1209,302 +1076,220 @@ header nav {
                     </div>
                 </div>
 
-                <!-- SPLIT PAYMENT SECTION -->
                 <div id="split-payment-section" class="hidden space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <p class="text-[11px] text-slate-500 font-medium">Specify the first payment amount (e.g., ₱50 Cash), and the remaining balance will automatically be assigned to the second payment method.</p>
-                    
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Payment 1 Method</label>
-                            <select id="split-pm-1" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-                                <!-- Rendered via JS -->
-                            </select>
+                            <select id="split-pm-1" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs"></select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Payment 1 Amount (₱)</label>
-                            <input type="number" step="0.01" id="split-amt-1" oninput="calculateSplitRemaining()" placeholder="0.00" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold focus:ring-2 focus:ring-indigo-500">
+                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Amount (₱)</label>
+                            <input type="number" step="0.01" id="split-amt-1" oninput="calculateSplitRemaining()" placeholder="0.00" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold">
                         </div>
                     </div>
-
                     <div class="grid grid-cols-2 gap-3 pt-1 border-t border-slate-200">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Payment 2 Method (Kulang)</label>
-                            <select id="split-pm-2" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500">
-                                <!-- Rendered via JS -->
-                            </select>
+                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Payment 2 Method</label>
+                            <select id="split-pm-2" class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs"></select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Payment 2 Balance (₱)</label>
+                            <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Balance (₱)</label>
                             <input type="number" step="0.01" id="split-amt-2" readonly class="w-full px-3 py-2 bg-slate-200 border border-slate-300 rounded-xl text-xs font-bold text-indigo-700">
                         </div>
                     </div>
                 </div>
 
-                <button type="button" onclick="completeTransaction()" id="confirm-payment-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-xl shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center space-x-2 cursor-pointer mt-2">
+                <button type="button" onclick="completeTransaction()" id="confirm-payment-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2 cursor-pointer mt-2">
                     <i class="fa-solid fa-circle-check"></i>
-                    <span>Confirm & Print Receipt (Enter)</span>
+                    <span>Confirm & Print (Enter)</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- STAFF SCANNER MODAL FOR CHECKOUT -->
-    <div id="staff-scanner-modal" class="fixed inset-0 bg-slate-950/90 z-[70] hidden flex flex-col items-center justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col relative">
-            <div class="bg-slate-900 text-white px-4 py-3 flex justify-between items-center">
-                <h3 class="font-bold text-sm"><i class="fa-solid fa-camera text-amber-400"></i> Scan Staff Barcode ID</h3>
-                <button onclick="closeStaffScannerModal()" class="text-slate-400 hover:text-white text-lg cursor-pointer p-1"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="p-4 bg-slate-100 flex flex-col items-center">
-                <div id="staff-reader" class="w-full rounded-xl overflow-hidden bg-black"></div>
-                <p class="text-xs text-slate-500 mt-3 text-center">Itutok ang camera sa barcode ng Staff ID.</p>
-            </div>
-            <div class="p-3 bg-white border-t border-slate-200 text-center">
-                <button type="button" onclick="closeStaffScannerModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold py-2 px-6 rounded-xl cursor-pointer">Exit</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ADD CUSTOM DISCOUNT MODAL -->
+    <!-- OTHER MODALS -->
     <div id="add-discount-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 p-6 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-tag text-indigo-600"></i> Add Custom Discount</h3>
-                <button onclick="closeAddDiscountModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-sm text-slate-800">Add Custom Discount</h3>
+                <button onclick="closeAddDiscountModal()" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Discount Name</label>
-                    <input type="text" id="new-discount-name" placeholder="e.g. VIP Member" class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Porsyento (%)</label>
-                    <input type="number" step="0.1" id="new-discount-percent" placeholder="e.g. 15" class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
-                </div>
+                <input type="text" id="new-discount-name" placeholder="Discount Name" class="w-full px-3 py-2 bg-slate-100 border rounded-xl text-xs">
+                <input type="number" step="0.1" id="new-discount-percent" placeholder="Percentage (%)" class="w-full px-3 py-2 bg-slate-100 border rounded-xl text-xs">
             </div>
             <div class="flex gap-2 pt-2">
-                <button type="button" onclick="closeAddDiscountModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 rounded-xl text-xs font-semibold cursor-pointer">Cancel</button>
-                <button type="button" onclick="saveNewCustomDiscount()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Idagdag</button>
+                <button onclick="closeAddDiscountModal()" class="flex-1 bg-slate-200 py-2 rounded-xl text-xs cursor-pointer">Cancel</button>
+                <button onclick="saveNewCustomDiscount()" class="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-xs cursor-pointer">Add</button>
             </div>
         </div>
     </div>
 
-    <!-- ADD PAYMENT METHOD MODAL -->
     <div id="add-payment-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-xs w-full overflow-hidden border border-slate-100 p-6 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-wallet text-indigo-600"></i> Add Payment Method</h3>
-                <button onclick="closeAddPaymentModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-xs w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-sm text-slate-800">Add Payment Method</h3>
+                <button onclick="closeAddPaymentModal()" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div>
-                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">NAME OF PAYMENT</label>
-                <input type="text" id="new-payment-name" placeholder="e.g. Bank Transfer" class="w-full px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-indigo-500">
-            </div>
+            <input type="text" id="new-payment-name" placeholder="Payment Name" class="w-full px-3 py-2 bg-slate-100 border rounded-xl text-xs">
             <div class="flex gap-2 pt-2">
-                <button type="button" onclick="closeAddPaymentModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 rounded-xl text-xs font-semibold cursor-pointer">Cancel</button>
-                <button type="button" onclick="saveNewPaymentMethod()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">Add</button>
+                <button onclick="closeAddPaymentModal()" class="flex-1 bg-slate-200 py-2 rounded-xl text-xs cursor-pointer">Cancel</button>
+                <button onclick="saveNewPaymentMethod()" class="flex-1 bg-indigo-600 text-white py-2 rounded-xl text-xs cursor-pointer">Add</button>
             </div>
         </div>
     </div>
 
-    <!-- MANAGE / DELETE PAYMENT METHODS MODAL -->
     <div id="manage-payment-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 p-6 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
-                <h3 class="font-bold text-sm text-slate-800"><i class="fa-solid fa-gear text-indigo-600"></i> Manage Payment Methods</h3>
-                <button onclick="closeManagePaymentModal()" class="text-slate-400 hover:text-slate-600 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="font-bold text-sm text-slate-800">Manage Payment Methods</h3>
+                <button onclick="closeManagePaymentModal()" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <p class="text-[11px] text-slate-500">Maaari mong tanggalin ang mga custom payment methods. Ang Cash, GCash, Maya, at Staff Meal Points ay hindi maaaring burahin.</p>
-            <div id="manage-payment-list" class="space-y-2 max-h-48 overflow-y-auto">
-                <!-- Rendered via JS -->
-            </div>
-            <div class="pt-2 text-right">
-                <button type="button" onclick="closeManagePaymentModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer">Exit</button>
-            </div>
+            <div id="manage-payment-list" class="space-y-2 max-h-48 overflow-y-auto"></div>
+            <div class="pt-2 text-right"><button onclick="closeManagePaymentModal()" class="bg-slate-200 px-4 py-2 rounded-xl text-xs cursor-pointer">Exit</button></div>
         </div>
     </div>
 
     <!-- PRODUCT MODAL -->
     <div id="product-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border">
             <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
-                <h3 id="product-modal-title" class="font-bold text-lg flex items-center gap-2">
-                    <i class="fa-solid fa-box text-indigo-400"></i> Add New Product
-                </h3>
-                <button onclick="closeProductModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                <h3 id="product-modal-title" class="font-bold text-lg">Add New Product</h3>
+                <button onclick="closeProductModal()" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="product-form" onsubmit="saveProduct(event)" class="p-6 space-y-4">
                 <input type="hidden" id="edit-product-id">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Product Name</label>
-                    <input type="text" id="prod-name" required placeholder="e.g. Iced Caramel Latte" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <input type="text" id="prod-name" required class="w-full px-4 py-2.5 bg-slate-100 border rounded-xl text-sm">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Category</label>
-                        <input type="text" id="prod-category" required placeholder="e.g. Beverages" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="text" id="prod-category" required class="w-full px-4 py-2.5 bg-slate-100 border rounded-xl text-sm">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1 flex items-center justify-between">
-                            <span>Barcode / SKU</span>
-                            <span class="text-[10px] text-indigo-600 font-normal"><i class="fa-solid fa-barcode"></i> Pwedeng i-scan</span>
-                        </label>
-                        <input type="text" id="prod-barcode" required placeholder="I-scan o i-type..." class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Barcode / SKU</label>
+                        <input type="text" id="prod-barcode" required class="w-full px-4 py-2.5 bg-slate-100 border rounded-xl text-sm">
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Cost Price (₱)</label>
-                        <input type="number" step="0.01" id="prod-cost" required placeholder="0.00" class="w-full px-3 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Cost (₱)</label>
+                        <input type="number" step="0.01" id="prod-cost" required class="w-full px-3 py-2.5 bg-slate-100 border rounded-xl text-xs">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Retail Price (₱)</label>
-                        <input type="number" step="0.01" id="prod-price" required placeholder="0.00" class="w-full px-3 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Retail (₱)</label>
+                        <input type="number" step="0.01" id="prod-price" required class="w-full px-3 py-2.5 bg-slate-100 border rounded-xl text-xs">
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-600 uppercase mb-1">Wholesale (₱)</label>
-                        <input type="number" step="0.01" id="prod-wholesale-price" required placeholder="0.00" class="w-full px-3 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="number" step="0.01" id="prod-wholesale-price" required class="w-full px-3 py-2.5 bg-slate-100 border rounded-xl text-xs">
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Stock Qty</label>
-                        <input type="number" id="prod-stock" required placeholder="0" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="number" id="prod-stock" required class="w-full px-4 py-2.5 bg-slate-100 border rounded-xl text-sm">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Expiry Date</label>
-                        <input type="date" id="prod-expiry" required class="w-full px-3 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="date" id="prod-expiry" required class="w-full px-3 py-2.5 bg-slate-100 border rounded-xl text-xs">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Product Image / Icon Symbol</label>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Product Emoji</label>
                     <div class="relative">
-                        <input type="text" id="prod-icon" readonly onclick="toggleEmojiPicker()" required placeholder="Add picture of product" class="w-full px-4 py-2.5 bg-slate-100 border border-slate-200 rounded-xl text-sm cursor-pointer text-center font-bold text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <div id="emoji-picker-dropdown" class="hidden absolute left-0 bottom-full mb-2 w-full bg-white border border-slate-200 rounded-2xl shadow-xl p-3 z-50 grid grid-cols-6 gap-2 max-h-48 overflow-y-auto">
-                        </div>
+                        <input type="text" id="prod-icon" readonly onclick="toggleEmojiPicker()" required class="w-full px-4 py-2.5 bg-slate-100 border rounded-xl text-center font-bold cursor-pointer">
+                        <div id="emoji-picker-dropdown" class="hidden absolute left-0 bottom-full mb-2 w-full bg-white border rounded-2xl shadow-xl p-3 z-50 grid grid-cols-6 gap-2 max-h-48 overflow-y-auto"></div>
                     </div>
                 </div>
-                <div class="pt-2">
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center space-x-2 cursor-pointer">
-                        <i class="fa-solid fa-save"></i>
-                        <span>Save Product (Enter)</span>
-                    </button>
-                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl cursor-pointer">Save Product</button>
             </form>
         </div>
     </div>
 
     <!-- RECEIPT MODAL -->
     <div id="receipt-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden border flex flex-col max-h-[90vh]">
             <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
-                <h3 class="font-bold text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-indigo-400"></i> Transaction Receipt & Cash Drawer
-                </h3>
-                <button onclick="closeReceiptModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                <h3 class="font-bold text-sm">Transaction Receipt</h3>
+                <button onclick="closeReceiptModal()" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div id="printable-receipt" class="p-6 overflow-y-auto space-y-4 text-xs font-mono bg-white text-slate-800 flex-1">
                 <div class="text-center space-y-1">
                     <h4 class="font-bold text-base">Jasmar Sari-sari Store</h4>
-                    <p class="text-slate-500">123 Retail Boulevard, Metro Manila</p>
-                    <p class="text-slate-500">VAT Reg TIN: 000-123-456-000</p>
+                    <p class="text-slate-500">Metro Manila</p>
                 </div>
-                <div class="border-t border-dashed border-slate-300 pt-2 space-y-0.5 text-slate-600">
-                    <div class="flex justify-between"><span id="rcpt-id">Tx: #1001</span><span id="rcpt-date">2026-10-04 22:46</span></div>
-                    <div class="flex justify-between"><span id="rcpt-cashier">Cashier: Admin</span><span>Terminal: POS-01</span></div>
+                <div class="border-t border-dashed pt-2 space-y-0.5 text-slate-600">
+                    <div class="flex justify-between"><span id="rcpt-id">Tx: #1001</span><span id="rcpt-date">2026-10-04</span></div>
+                    <div class="flex justify-between"><span id="rcpt-cashier">Cashier: Admin</span></div>
                 </div>
-                <div class="border-t border-dashed border-slate-300 pt-2">
+                <div class="border-t border-dashed pt-2">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="border-b border-slate-200">
+                            <tr class="border-b">
                                 <th class="pb-1">Item</th>
                                 <th class="pb-1 text-center">Qty</th>
                                 <th class="pb-1 text-right">Price</th>
                                 <th class="pb-1 text-right">Sub</th>
                             </tr>
                         </thead>
-                        <tbody id="rcpt-items-list" class="divide-y divide-slate-100">
-                        </tbody>
+                        <tbody id="rcpt-items-list" class="divide-y"></tbody>
                     </table>
                 </div>
-                <div class="border-t border-dashed border-slate-300 pt-2 space-y-1 text-slate-700">
+                <div class="border-t border-dashed pt-2 space-y-1 text-slate-700">
                     <div class="flex justify-between"><span>Subtotal:</span><span id="rcpt-subtotal">₱0.00</span></div>
                     <div class="flex justify-between"><span id="rcpt-rcpt-discount-label">Discount:</span><span id="rcpt-discount">₱0.00</span></div>
                     <div id="rcpt-beneficiary-row" class="flex justify-between hidden text-[11px] text-indigo-600 font-semibold"><span>Discounted By:</span><span id="rcpt-beneficiary-name">-</span></div>
                     <div id="rcpt-tax-row" class="flex justify-between hidden"><span>VAT (12%):</span><span id="rcpt-tax">₱0.00</span></div>
-                    <div class="flex justify-between font-bold text-sm pt-1 border-t border-slate-200"><span>TOTAL:</span><span id="rcpt-total">₱0.00</span></div>
+                    <div class="flex justify-between font-bold text-sm pt-1 border-t"><span>TOTAL:</span><span id="rcpt-total">₱0.00</span></div>
                 </div>
-                <div class="border-t border-dashed border-slate-300 pt-2 space-y-1 text-slate-700" id="rcpt-payment-details-container">
-                    <div class="flex justify-between"><span>Payment Method:</span><span id="rcpt-pm">Cash</span></div>
-                    <div class="flex justify-between"><span>Cash Tendered:</span><span id="rcpt-tendered">₱0.00</span></div>
-                    <div class="flex justify-between font-semibold"><span>Change:</span><span id="rcpt-change">₱0.00</span></div>
-                </div>
-                <div class="text-center pt-4 text-slate-500 space-y-1">
-                    <p>*** THANK YOU FOR YOUR PURCHASE! ***</p>
-                    <p class="text-[10px]">God is good all the time</p>
-                </div>
+                <div class="border-t border-dashed pt-2 space-y-1 text-slate-700" id="rcpt-payment-details-container"></div>
             </div>
 
             <iframe id="cash-drawer-frame" style="display:none;"></iframe>
 
-            <div class="p-4 bg-slate-50 border-t border-slate-200 flex gap-2">
-                <button onclick="printReceipt()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 shadow-md cursor-pointer">
-                    <i class="fa-solid fa-print"></i>
-                    <span>Print & Open Drawer</span>
-                </button>
-                <button onclick="closeReceiptModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2.5 px-4 rounded-xl text-xs cursor-pointer">
-                    Close
-                </button>
+            <div class="p-4 bg-slate-50 border-t flex gap-2">
+                <button onclick="printReceipt()" class="flex-1 bg-indigo-600 text-white font-semibold py-2.5 rounded-xl text-xs cursor-pointer">Print</button>
+                <button onclick="closeReceiptModal()" class="bg-slate-200 text-slate-700 font-semibold py-2.5 px-4 rounded-xl text-xs cursor-pointer">Close</button>
             </div>
         </div>
     </div>
 
     <!-- REPORT SUMMARY MODAL -->
     <div id="report-summary-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border flex flex-col max-h-[90vh]">
             <div id="report-modal-header" class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center">
-                <h3 id="report-modal-title" class="font-bold text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-file-lines text-indigo-400"></i> Summary Report
-                </h3>
-                <button onclick="closeReportSummaryModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+                <h3 id="report-modal-title" class="font-bold text-sm">Summary Report</h3>
+                <button onclick="closeReportSummaryModal()" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="p-6 overflow-y-auto space-y-4 text-xs font-mono bg-white text-slate-800 flex-1" id="report-summary-content">
-            </div>
-            <div class="p-4 bg-slate-50 border-t border-slate-200 flex gap-2" id="report-modal-actions-container">
-                <button onclick="window.print()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1 cursor-pointer">
-                    <i class="fa-solid fa-print"></i><span>Print Report</span>
-                </button>
-                <button onclick="closeReportSummaryModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2.5 px-4 rounded-xl text-xs cursor-pointer">Close</button>
+            <div class="p-6 overflow-y-auto space-y-4 text-xs font-mono bg-white text-slate-800 flex-1" id="report-summary-content"></div>
+            <div class="p-4 bg-slate-50 border-t flex gap-2" id="report-modal-actions-container">
+                <button onclick="window.print()" class="flex-1 bg-indigo-600 text-white py-2.5 rounded-xl text-xs cursor-pointer">Print Report</button>
+                <button onclick="closeReportSummaryModal()" class="bg-slate-200 text-slate-700 py-2.5 px-4 rounded-xl text-xs cursor-pointer">Close</button>
             </div>
         </div>
     </div>
 
-    <!-- ADMIN ATTENDANCE MODAL -->
+    <!-- ATTENDANCE MODAL -->
     <div id="admin-attendance-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-950 text-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden border border-slate-800 flex flex-col max-h-[90vh]">
-            <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center border-b border-slate-800">
-                <h3 class="font-bold text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-user-clock text-indigo-400"></i> Staff Attendance Logs (Admin View)
-                </h3>
-                <button onclick="closeAttendanceModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <div class="bg-slate-950 text-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden border flex flex-col max-h-[90vh]">
+            <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center border-b">
+                <h3 class="font-bold text-sm">Staff Attendance Logs</h3>
+                <button onclick="closeAttendanceModal()" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="p-6 overflow-y-auto flex-1 space-y-4">
-                <div class="flex flex-wrap items-center gap-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
-                    <span class="text-xs font-semibold text-slate-400">Calendar Filter:</span>
-                    <input type="date" id="att-date-filter" onchange="renderAttendanceTable()" class="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white">
-                    <button onclick="resetAttendanceFilter()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg text-xs">Reset to Today</button>
-                </div>
-
-                <div class="flex justify-between items-center">
-                    <p class="text-xs text-slate-400">Staff/Cashier Login, Break, and Logout Time Records</p>
-                    <button onclick="requestClearAttendanceLogs()" class="text-xs text-rose-400 hover:underline cursor-pointer"><i class="fa-solid fa-trash"></i> Clear Logs</button>
+                <div class="flex items-center gap-2 bg-slate-900 p-3 rounded-xl border">
+                    <input type="date" id="att-date-filter" onchange="renderAttendanceTable()" class="px-3 py-1.5 bg-slate-950 border rounded-lg text-xs text-white">
+                    <button onclick="resetAttendanceFilter()" class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg text-xs">Reset</button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-slate-300 border-collapse">
                         <thead class="bg-slate-900 text-slate-400">
                             <tr>
-                                <th class="p-3">User / Name</th>
+                                <th class="p-3">User</th>
                                 <th class="p-3">Role</th>
                                 <th class="p-3">Login Time</th>
                                 <th class="p-3">Break History</th>
@@ -1512,111 +1297,60 @@ header nav {
                                 <th class="p-3 text-center">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="attendance-tbody" class="divide-y divide-slate-800">
-                        </tbody>
+                        <tbody id="attendance-tbody" class="divide-y divide-slate-800"></tbody>
                     </table>
                 </div>
             </div>
-            <div class="p-4 bg-slate-900 border-t border-slate-800 flex justify-between items-center">
-                <span class="text-xs text-slate-400">Visible to Admin Only.</span>
-                <button onclick="closeAttendanceModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-xl text-xs cursor-pointer">
-                    Exit
-                </button>
+            <div class="p-4 bg-slate-900 border-t text-right">
+                <button onclick="closeAttendanceModal()" class="bg-slate-800 text-slate-200 py-2 px-4 rounded-xl text-xs cursor-pointer">Exit</button>
             </div>
         </div>
     </div>
 
     <!-- ADMIN ACCOUNTS MODAL -->
     <div id="admin-accounts-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-950 text-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-800 flex flex-col max-h-[90vh]">
-            <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center border-b border-slate-800">
-                <h3 class="font-bold text-sm flex items-center gap-2">
-                    <i class="fa-solid fa-users-gear text-indigo-400"></i> Manage Accounts & Create User
-                </h3>
-                <button onclick="closeAdminAccountsModal()" class="text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
+        <div class="bg-slate-950 text-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border flex flex-col max-h-[90vh]">
+            <div class="bg-slate-900 text-white px-6 py-4 flex justify-between items-center border-b">
+                <h3 class="font-bold text-sm">Manage Accounts</h3>
+                <button onclick="closeAdminAccountsModal()" class="text-slate-400 cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            
             <div class="p-6 overflow-y-auto flex-1 space-y-6">
-                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-4">
-                    <h4 class="font-bold text-xs uppercase tracking-wider text-indigo-400"><i class="fa-solid fa-user-plus"></i> Add New Account</h4>
+                <div class="bg-slate-900 p-4 rounded-xl border space-y-4">
                     <form onsubmit="handleAdminCreateAccount(event)" class="space-y-3" autocomplete="off">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Full Name (CAPSLOCK)</label>
-                                <input type="text" id="admin-reg-fullname" required oninput="this.value = this.value.toUpperCase()" placeholder="JUAN DELA CRUZ" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:ring-2 focus:ring-indigo-500 uppercase">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Username</label>
-                                <input type="text" id="admin-reg-username" required autocomplete="off" placeholder="Admin02 o Cashier03" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:ring-2 focus:ring-indigo-500">
-                                <p id="admin-username-error" class="text-[10px] text-rose-400 mt-1 hidden">Dapat may 5+ letra, 1 malaking titik, at 2 numero.</p>
-                            </div>
+                            <input type="text" id="admin-reg-fullname" required oninput="this.value = this.value.toUpperCase()" placeholder="FULL NAME" class="w-full px-3 py-2 bg-slate-950 border rounded-lg text-xs text-white uppercase">
+                            <input type="text" id="admin-reg-username" required placeholder="Username" class="w-full px-3 py-2 bg-slate-950 border rounded-lg text-xs text-white">
                         </div>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            <div>
-                                <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Email</label>
-                                <input type="email" id="admin-reg-email" required placeholder="email@jmspos.com" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:ring-2 focus:ring-indigo-500">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Password / PIN</label>
-                                <input type="password" id="admin-reg-password" required autocomplete="new-password" placeholder="••••" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:ring-2 focus:ring-indigo-500">
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Role</label>
-                                <select id="admin-reg-role" class="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:ring-2 focus:ring-indigo-500">
-                                    <option value="Cashier">Cashier</option>
-                                    <option value="Admin">Admin</option>
-                                </select>
-                            </div>
+                            <input type="email" id="admin-reg-email" required placeholder="email@domain.com" class="w-full px-3 py-2 bg-slate-950 border rounded-lg text-xs text-white">
+                            <input type="password" id="admin-reg-password" required placeholder="Password" class="w-full px-3 py-2 bg-slate-950 border rounded-lg text-xs text-white">
+                            <select id="admin-reg-role" class="w-full px-3 py-2 bg-slate-950 border rounded-lg text-xs text-white">
+                                <option value="Cashier">Cashier</option>
+                                <option value="Admin">Admin</option>
+                            </select>
                         </div>
-                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg text-xs transition-all shadow cursor-pointer">
-                            <i class="fa-solid fa-user-plus"></i> Create Account
-                        </button>
+                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs cursor-pointer">Create Account</button>
                     </form>
                 </div>
-
-                <div class="space-y-2">
-                    <h4 class="font-bold text-xs uppercase tracking-wider text-slate-400">Existing System Accounts</h4>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs text-slate-300 border-collapse">
-                            <thead class="bg-slate-900 text-slate-400">
-                                <tr>
-                                    <th class="p-3">Full Name</th>
-                                    <th class="p-3">Username</th>
-                                    <th class="p-3">Email</th>
-                                    <th class="p-3">Role</th>
-                                    <th class="p-3 text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-accounts-tbody" class="divide-y divide-slate-800">
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300 border-collapse">
+                        <thead class="bg-slate-900 text-slate-400">
+                            <tr>
+                                <th class="p-3">Full Name</th>
+                                <th class="p-3">Username</th>
+                                <th class="p-3">Role</th>
+                                <th class="p-3 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-accounts-tbody" class="divide-y divide-slate-800"></tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="p-4 bg-slate-900 border-t border-slate-800 flex justify-between items-center">
-                <span class="text-xs text-slate-400">*Tanging Admin lamang ang nakakakita nito.</span>
-                <button onclick="closeAdminAccountsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2 px-4 rounded-xl text-xs cursor-pointer">
-                    Exit
-                </button>
+            <div class="p-4 bg-slate-900 border-t text-right">
+                <button onclick="closeAdminAccountsModal()" class="bg-slate-800 text-slate-200 py-2 px-4 rounded-xl text-xs cursor-pointer">Exit</button>
             </div>
         </div>
     </div>
-
-
-<!-- ILAGAY DITO ANG DARK MODE BUTTON AT VERSION INFO -->
-    <div class="flex items-center space-x-3 border-l border-slate-700 pl-3">
-        <button onclick="toggleDarkMode()" title="I-toggle ang Dark / Light Mode" class="bg-slate-800 hover:bg-slate-700 text-amber-400 p-2 rounded-xl transition-all text-xs flex items-center justify-center cursor-pointer shadow">
-            <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
-        </button>
-        <div class="text-right hidden xl:block">
-            <div class="text-[11px] font-bold text-indigo-400">JmsPOS v1.2</div>
-            <div class="text-[9px] text-slate-400">Powered by JMS Tech Solutions</div>
-        </div>
-    </div>
-
-
-
 
 
 <!-- JAVASCRIPT SCRIPT -->
@@ -5818,3 +5552,5 @@ function handleLogin(e) {
   </script>
 </body>
 </html>
+
+   
