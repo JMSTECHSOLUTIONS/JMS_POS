@@ -5755,42 +5755,48 @@ function handleExternalCreateAccount(e) {
 }
 
 // --- FIREBASE LOGIN NA MAY 4-UNIT / DEVICE RESTRICTION CHECK ---
+// --- AYOS NA FIREBASE LOGIN NA MAY 4-UNIT DEVICE RESTRICTION ---
 function handleLogin(e) {
     e.preventDefault();
     const usernameInput = document.getElementById('login-username').value.trim();
     const passwordInput = document.getElementById('login-pin').value.trim();
 
-    // Dito hinahanap muna natin ang email gamit ang username sa Firestore
+    // 1. Hanapin muna sa Firestore kung aling user ang may ganitong username
     db.collection("users").where("username", "==", usernameInput).get()
         .then((querySnapshot) => {
             if (querySnapshot.empty) {
-                alert("Walang nakitang account na may ganitong username!");
+                alert("Walang nakitang account na may ganitong username sa Firebase!");
                 return;
             }
 
             let userData = null;
+            let userDocId = null;
             querySnapshot.forEach((doc) => {
                 userData = doc.data();
+                userDocId = doc.id;
             });
 
-            // Mag-login gamit ang Firebase Auth email at password
+            if (!userData || !userData.email) {
+                alert("Walang nakatalagang Email ang account na ito.");
+                return;
+            }
+
+            // 2. Mag-login gamit ang natagpuang Email at Password mula sa Firebase Auth
             return auth.signInWithEmailAndPassword(userData.email, passwordInput)
                 .then((userCredential) => {
                     const uid = userCredential.user.uid;
                     const deviceId = localStorage.getItem("jmspos_device_id") || "DEV-" + Math.random().toString(36).substring(2);
                     localStorage.setItem("jmspos_device_id", deviceId);
 
-                    // I-check ang active devices para masigurong hindi lalagpas sa 4 units
+                    // 3. I-check ang 4-unit device restriction sa Firestore
                     const deviceRef = db.collection("users").doc(uid).collection("devices").doc(deviceId);
                     
                     return deviceRef.get().then((doc) => {
                         if (!doc.exists) {
-                            // Kung bagong PC/unit ito, bilangin muna ang kasalukuyang naka-login
                             return db.collection("users").doc(uid).collection("devices").get().then((snapshot) => {
-                                if (snapshot.size >= userData.allowedUnits) {
-                                    throw new Error(`Naabot na ang limitasyon ng ${userData.allowedUnits} units/PCs para sa account na ito!`);
+                                if (snapshot.size >= (userData.allowedUnits || 4)) {
+                                    throw new Error(`Naabot na ang limitasyon ng ${userData.allowedUnits || 4} units/PCs para sa account na ito!`);
                                 }
-                                // I-register ang bagong device
                                 return deviceRef.set({ active: true, loginTime: new Date().toISOString() });
                             });
                         }
@@ -5804,11 +5810,9 @@ function handleLogin(e) {
         })
         .catch((error) => {
             console.error("Login Error:", error);
-            alert(error.message || "Nagkaroon ng problema sa pag-login.");
+            alert("Login Error: " + (error.message || "Mali ang username o password."));
         });
 }
-
-
  
 
   </script>
