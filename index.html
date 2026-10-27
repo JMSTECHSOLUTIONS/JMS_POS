@@ -1639,6 +1639,104 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 
+// --- FIREBASE REGISTRATION PARA SA 4-UNIT CLIENTS ---
+function handleExternalCreateAccount(e) {
+    e.preventDefault();
+    const fullName = document.getElementById('ext-reg-fullname').value.trim().toUpperCase();
+    const username = document.getElementById('ext-reg-username').value.trim();
+    const email = document.getElementById('ext-reg-email').value.trim();
+    const password = document.getElementById('ext-reg-password').value.trim();
+    const role = document.getElementById('ext-reg-role').value;
+
+    if (!fullName || !username || !email || !password) {
+        alert("Mangyaring punan ang lahat ng kinakailangang impormasyon!");
+        return;
+    }
+
+    // 1. Gumawa ng user sa Firebase Authentication
+    auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            const uid = userCredential.user.uid;
+            
+            // 2. I-save ang detalye sa Firestore Database kasama ang 4-unit limit
+            return db.collection("users").doc(uid).set({
+                uid: uid,
+                name: fullName,
+                username: username,
+                email: email,
+                role: role,
+                allowedUnits: 4, // Nakatakda sa 4 units/PC lang
+                activeDevices: 0,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        })
+        .then(() => {
+            alert("Matagumpay na na-register ang account sa Firebase!");
+            closeExternalCreateAccountModal();
+            document.getElementById('external-create-account-modal').querySelector('form').reset();
+        })
+        .catch((error) => {
+            console.error("Error sa pag-register:", error);
+            alert("May error: " + error.message);
+        });
+}
+
+// --- FIREBASE LOGIN NA MAY 4-UNIT / DEVICE RESTRICTION CHECK ---
+function handleLogin(e) {
+    e.preventDefault();
+    const usernameInput = document.getElementById('login-username').value.trim();
+    const passwordInput = document.getElementById('login-pin').value.trim();
+
+    // Dito hinahanap muna natin ang email gamit ang username sa Firestore
+    db.collection("users").where("username", "==", usernameInput).get()
+        .then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                alert("Walang nakitang account na may ganitong username!");
+                return;
+            }
+
+            let userData = null;
+            querySnapshot.forEach((doc) => {
+                userData = doc.data();
+            });
+
+            // Mag-login gamit ang Firebase Auth email at password
+            return auth.signInWithEmailAndPassword(userData.email, passwordInput)
+                .then((userCredential) => {
+                    const uid = userCredential.user.uid;
+                    const deviceId = localStorage.getItem("jmspos_device_id") || "DEV-" + Math.random().toString(36).substring(2);
+                    localStorage.setItem("jmspos_device_id", deviceId);
+
+                    // I-check ang active devices para masigurong hindi lalagpas sa 4 units
+                    const deviceRef = db.collection("users").doc(uid).collection("devices").doc(deviceId);
+                    
+                    return deviceRef.get().then((doc) => {
+                        if (!doc.exists) {
+                            // Kung bagong PC/unit ito, bilangin muna ang kasalukuyang naka-login
+                            return db.collection("users").doc(uid).collection("devices").get().then((snapshot) => {
+                                if (snapshot.size >= userData.allowedUnits) {
+                                    throw new Error(`Naabot na ang limitasyon ng ${userData.allowedUnits} units/PCs para sa account na ito!`);
+                                }
+                                // I-register ang bagong device
+                                return deviceRef.set({ active: true, loginTime: new Date().toISOString() });
+                            });
+                        }
+                    }).then(() => {
+                        currentUser = userData;
+                        document.getElementById('login-modal').classList.add('hidden');
+                        updateUserUI();
+                        alert(`Maligayang pagdating, ${currentUser.name}! (Naka-connect sa Firebase)`);
+                    });
+                });
+        })
+        .catch((error) => {
+            console.error("Login Error:", error);
+            alert(error.message || "Nagkaroon ng problema sa pag-login.");
+        });
+}
+
+
+
 
   </script>
 </body>
