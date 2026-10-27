@@ -21,7 +21,17 @@
     <!-- Chart.js para sa Visual Sales Analytics Graph -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
     <style>
+
+html, body {
+    height: 100%;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+
+
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -32,10 +42,14 @@
             #printable-receipt, #printable-receipt * { visibility: visible; }
             #printable-receipt { position: absolute; left: 0; top: 0; width: 100%; }
             #report-summary-modal * { visibility: visible; }
+
+
+
+
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 h-screen flex flex-col overflow-hidden">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
     <!-- OPENING SCREEN SLIDESHOW OVERLAY -->
     <div id="opening-slideshow-screen" onclick="dismissOpeningScreen()" class="fixed inset-0 bg-slate-950 z-[100] flex flex-col items-center justify-center p-6 text-white cursor-pointer transition-all duration-700">
