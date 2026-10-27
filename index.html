@@ -5669,7 +5669,10 @@ function switchMobileTab(tab) {
     }
 }
 
-
+if (window.location.hostname !== "yungdomainmo.com" && window.location.hostname !== "localhost") {
+    document.body.innerHTML = "Unauthorized domain.";
+    throw new Error("Unauthorized domain.");
+}
 
  
 
