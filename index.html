@@ -229,7 +229,8 @@ header nav {
 
       
             <!-- Right: Interactive Cart Panel -->
-            <div class="w-full md:w-[380px] lg:w-[420px] bg-white flex flex-col h-full shadow-xl z-10 border-l border-slate-200">
+ 
+         <div id="mobile-cart-panel" class="hidden md:flex w-full md:w-[380px] lg:w-[420px] bg-white flex flex-col h-full shadow-xl z-10 border-l border-slate-200">
                 <div class="p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
                     <div class="flex items-center space-x-2">
                         <i class="fa-solid fa-cart-shopping text-indigo-600"></i>
@@ -345,12 +346,19 @@ header nav {
                     <p class="text-xs sm:text-sm text-slate-500">Track stock levels, best-selling products, and items nearing expiration.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
+
                     <!-- EXCEL / CSV IMPORT BUTTON -->
                     <label class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-3 py-2 rounded-xl shadow-md transition-all flex items-center space-x-1.5 cursor-pointer">
                         <i class="fa-solid fa-file-excel"></i>
                         <span>Import Excel (CSV)</span>
                         <input type="file" id="import-excel-file" accept=".csv" onchange="importProductsFromExcel(event)" class="hidden">
                     </label>
+
+			<button onclick="downloadProductTemplate()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs sm:text-sm font-semibold px-3 py-2 rounded-xl shadow-md transition-all flex items-center space-x-1.5 cursor-pointer">
+      			  <i class="fa-solid fa-file-arrow-down"></i>
+      		  <span>Download Template</span>
+  		  </button>
+
                     <button onclick="exportSystemBackup()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-semibold px-3 py-2 rounded-xl shadow-md transition-all flex items-center space-x-1.5 cursor-pointer">
                         <i class="fa-solid fa-cloud-arrow-down"></i>
                         <span>Export Backup</span>
@@ -360,6 +368,7 @@ header nav {
                         <span>Restore Backup</span>
                         <input type="file" id="import-backup-file" accept=".json" onchange="importSystemBackup(event)" class="hidden">
                     </label>
+
                     <button onclick="requestAddProduct()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl shadow-md transition-all flex items-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-plus"></i>
                         <span>Add New Product</span>
@@ -1555,100 +1564,31 @@ header nav {
 
 // 1. DOWNLOAD TEMPLATE (3 Kolum Lamang)
 function downloadStaffTemplate() {
-    let htmlTemplate = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-    <head>
-        <meta charset="UTF-8">
-        <xml>
-            <x:ExcelWorkbook>
-                <x:ExcelWorksheets>
-                    <x:ExcelWorksheet>
-                        <x:Name>Staff Points Template</x:Name>
-                        <x:WorksheetOptions>
-                            <x:Print>
-                                <x:Orientation>Landscape</x:Orientation>
-                                <x:PaperSize>1</x:PaperSize>
-                                <x:FitToPage/>
-                                <x:FitWidth>1</x:FitWidth>
-                                <x:FitHeight>1</x:FitHeight>
-                            </x:Print>
-                            <x:PageSetup>
-                                <x:Layout x:Orientation="Landscape"/>
-                                <x:Page x:PaperSize="Letter"/>
-                            </x:PageSetup>
-                            <x:DisplayGridlines/>
-                        </x:WorksheetOptions>
-                    </x:ExcelWorksheet>
-                </x:ExcelWorksheets>
-            </x:ExcelWorkbook>
-        </xml>
-        <style>
-            body, table, td, th { 
-                font-family: Calibri, sans-serif; 
-                font-size: 11pt; 
-                vertical-align: middle; 
-                text-align: center; 
-            }
-            .header-row { 
-                background-color: #1F2937; 
-                color: #FFFFFF; 
-                font-weight: bold; 
-                height: 26px; 
-            }
-            .text-left { text-align: left; }
-            .num { mso-number-format:"₱\\#,##0.00"; text-align: right; }
-            .data-cell { height: 22px; border: 0.5pt solid #D1D5DB; }
-        </style>
-    </head>
-    <body>
-        <table>
-            <tr class="header-row">
-                <th style="width: 250px;">Full Name</th>
-                <th style="width: 180px;">Employee Barcode / ID</th>
-                <th style="width: 180px;">Current Points Balance (₱)</th>
-            </tr>
-            <tr>
-                <td class="data-cell text-left" style="font-weight: bold;">JUAN DELA CRUZ</td>
-                <td class="data-cell" style="mso-number-format:\\@;">EMP-1001</td>
-                <td class="data-cell num">1500.00</td>
-            </tr>
-            <tr>
-                <td class="data-cell text-left" style="font-weight: bold;">MARIA SANTOS</td>
-                <td class="data-cell" style="mso-number-format:\\@;">EMP-1002</td>
-                <td class="data-cell num">1500.00</td>
-            </tr>`;
+    let csvContent = "Full Name,Employee Barcode / ID,Current Points Balance (₱),Monthly Quota (₱)\r\n";
+    csvContent += `"JUAN DELA CRUZ","EMP-1001",1500.00,1500.00\r\n`;
+    csvContent += `"MARIA SANTOS","EMP-1002",1500.00,1500.00\r\n`;
 
-    // Magdagdag tayo ng 50 na pre-formatted blank rows para habang nagta-type ka sa baba, nakaset na ang font at alignment
     for (let i = 0; i < 50; i++) {
-        htmlTemplate += `
-            <tr>
-                <td class="data-cell text-left"></td>
-                <td class="data-cell"></td>
-                <td class="data-cell num"></td>
-            </tr>`;
+        csvContent += `,,,\r\n`;
     }
 
-    htmlTemplate += `
-        </table>
-    </body>
-    </html>`;
-
-    const blob = new Blob([htmlTemplate], { type: 'application/vnd.ms-excel' });
-    const url = window.URL.createObjectURL(blob);
+    const blob = new Blob(["\ufeff" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `JmsPOS_Staff_Points_Template.xls`;
+    a.download = `JmsPOS_Staff_Points_Template.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url);
     
     if(typeof logAudit === 'function') {
-        logAudit('DOWNLOAD TEMPLATE', 'Downloaded pre-formatted multi-row template.');
+        logAudit('DOWNLOAD TEMPLATE', 'Nag-download ng CSV staff points template.');
     }
 }
 
 // 1. PINATIBAY NA IMPORT FUNCTION
+// PINATIBAY NA IMPORT FUNCTION NA MAY CONFLICT CHECK PARA SA BARCODE
 function handleStaffImport(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -1659,6 +1599,8 @@ function handleStaffImport(event) {
         const rows = text.split(/\r\n|\n/);
         
         let importedCount = 0;
+        let updatedCount = 0;
+        let conflictCount = 0;
         if (!Array.isArray(staffList)) {
             staffList = [];
         }
@@ -1675,26 +1617,39 @@ function handleStaffImport(event) {
             const delimiter = row.includes('\t') ? '\t' : ',';
             const cols = row.split(delimiter).map(col => col.replace(/^"|"$/g, '').trim());
             
-            if (cols.length >= 3) {
+            if (cols.length >= 2) {
                 const name = cols[0];
                 const barcode = cols[1];
-                const pointsRaw = cols[2].replace(/[^\d.]/g, '');
-                const points = parseFloat(pointsRaw) || 0;
+                const pointsRaw = cols[2] ? cols[2].replace(/[^\d.]/g, '') : '1500';
+                const points = parseFloat(pointsRaw) || 1500;
+                const quota = cols[3] ? parseFloat(cols[3].replace(/[^\d.]/g, '')) || points : points;
                 
-                // Siguraduhing may laman at valid ang pangalan at barcode
                 if (name && barcode && name !== "" && !name.toUpperCase().includes('CALIBRI') && !name.toUpperCase().includes('RETURN')) {
-                    const existingStaff = staffList.find(s => s.barcode && s.barcode.toLowerCase() === barcode.toLowerCase());
-                    if (existingStaff) {
-                        existingStaff.name = name.toUpperCase();
-                        existingStaff.points = points;
-                        existingStaff.monthlyQuota = points;
+                    
+                    // 1. I-check kung may nagmamay-ari na ng Barcode na ito
+                    const existingStaffByBarcode = staffList.find(s => s.barcode && s.barcode.toLowerCase() === barcode.toLowerCase());
+                    
+                    if (existingStaffByBarcode) {
+                        // CONFLICT CHECK: Kung pareho ang Barcode pero MAGKAIBA ang Pangalan
+                        if (existingStaffByBarcode.name.toLowerCase() !== name.toLowerCase()) {
+                            conflictCount++;
+                            console.warn(`Conflict detected for Barcode ${barcode}: Existing (${existingStaffByBarcode.name}) vs New (${name})`);
+                            // Hindi muna natin ia-overwrite para hindi masira ang record ng totoong may-ari ng ID
+                            continue; 
+                        } else {
+                            // Kung pareho ang barcode at pangalan, i-update lang ang points allowance / quota
+                            existingStaffByBarcode.points = points;
+                            existingStaffByBarcode.monthlyQuota = quota;
+                            updatedCount++;
+                        }
                     } else {
+                        // 2. Kung walang kaparehong barcode, idagdag bilang bagong staff
                         staffList.push({
                             id: Date.now() + i,
                             name: name.toUpperCase(),
                             barcode: barcode,
                             points: points,
-                            monthlyQuota: points
+                            monthlyQuota: quota
                         });
                         importedCount++;
                     }
@@ -1706,7 +1661,7 @@ function handleStaffImport(event) {
         localStorage.setItem('jmspos_staff', JSON.stringify(staffList));
         renderStaffTable();
         
-        alert(`Matagumpay na na-import ang ${importedCount} na staff!`);
+        alert(`Matagumpay na na-import ang mga staff!\n- Bagong idinagdag: ${importedCount}\n- Na-update: ${updatedCount}\n- Na-skip na Conflict (Magkaibang pangalan sa iisang Barcode): ${conflictCount}`);
         event.target.value = '';
     };
     reader.readAsText(file);
@@ -1745,22 +1700,26 @@ function renderStaffTable() {
     `).join('');
 }
 
-// 3. EXPORT POINTS (Excel/CSV na may 3 Kolum Lamang)
+
+
+
+        // 2. EXPORT STAFF POINTS SA CSV FORMAT
 function exportStaffPointsExcel() {
     if (!staffList || staffList.length === 0) {
         alert("Wala pang nakatalang staff records para ma-export.");
         return;
     }
 
-    let csvContent = "Full Name,Employee Barcode / ID,Current Points Balance\r\n";
+    let csvContent = "Full Name,Employee Barcode / ID,Current Points Balance (₱),Monthly Quota (₱)\r\n";
     staffList.forEach(s => {
         const name = `"${(s.name || '').replace(/"/g, '""')}"`;
         const barcode = `"${(s.barcode || '').replace(/"/g, '""')}"`;
         const points = (s.points || 0).toFixed(2);
-        csvContent += `${name},${barcode},${points}\r\n`;
+        const quota = (s.monthlyQuota || 1500).toFixed(2);
+        csvContent += `${name},${barcode},${points},${quota}\r\n`;
     });
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob(["\ufeff" + csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -1771,121 +1730,9 @@ function exportStaffPointsExcel() {
     URL.revokeObjectURL(url);
     
     if(typeof logAudit === 'function') {
-        logAudit('EXPORT STAFF REPORT', 'Exported 3-column staff points list.');
+        logAudit('EXPORT STAFF REPORT', 'Nag-export ng staff points list sa CSV format.');
     }
 }
-
-        function exportStaffPointsExcel() {
-            if (!staffList || staffList.length === 0) {
-                alert("Wala pang nakatalang staff records para ma-export.");
-                return;
-            }
-
-            const validStaffList = staffList.filter(s => {
-                if (!s || typeof s !== 'object') return false;
-                const name = String(s.name || '').trim();
-                const barcode = String(s.barcode || '').trim();
-                if (name.length === 0 || barcode.length === 0) return false;
-                const hasWeirdSymbols = /[<>#%&{}\\*?/$!'@+\uFFFD]/g.test(name) || /[<>#%&{}\\*?/$!'@+\uFFFD]/g.test(barcode);
-                if (hasWeirdSymbols) return false;
-                return true;
-            });
-
-            if (validStaffList.length === 0) {
-                alert("Walang balidong staff records na nakita para i-export.");
-                return;
-            }
-
-            const timestamp = new Date().toLocaleString();
-
-            let htmlTemplate = `
-            <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-            <head>
-                <meta charset="UTF-8">
-                <xml>
-                    <x:ExcelWorkbook>
-                        <x:ExcelWorksheets>
-                            <x:ExcelWorksheet>
-                                <x:Name>Staff Points Directory</x:Name>
-                                <x:WorksheetOptions>
-                                    <x:Print>
-                                        <x:Orientation>Landscape</x:Orientation>
-                                        <x:PaperSize>1</x:PaperSize>
-                                        <x:FitToPage/>
-                                        <x:FitWidth>1</x:FitWidth>
-                                        <x:FitHeight>1</x:FitHeight>
-                                        <x:Margin x:Top="0.75" x:Bottom="0.75" x:Left="0.75" x:Right="0.75"/>
-                                    </x:Print>
-                                    <x:PageSetup>
-                                        <x:Layout x:Orientation="Landscape"/>
-                                        <x:Page x:PaperSize="Letter"/>
-                                    </x:PageSetup>
-                                    <x:DisplayGridlines/>
-                                </x:WorksheetOptions>
-                            </x:ExcelWorksheet>
-                        </x:ExcelWorksheets>
-                    </x:ExcelWorkbook>
-                </xml>
-                <style>
-                    body { font-family: Calibri, sans-serif; }
-                    .title { font-size: 16px; font-weight: bold; color: #1F2937; text-align: center; }
-                    .subtitle { font-size: 11px; font-style: italic; color: #6B7280; text-align: center; }
-                    .header-row { background-color: #1F2937; color: #FFFFFF; font-weight: bold; text-align: center; height: 26px; }
-                    .total-row { background-color: #ECFDF5; font-weight: bold; border-top: 1px solid #1F2937; border-bottom: 3px double #1F2937; }
-                    td, th { border: 0.5pt solid #D1D5DB; padding: 8px 12px; font-size: 11px; vertical-align: middle; text-align: center; }
-                    .text-left { text-align: left; }
-                    .num { mso-number-format:"₱\\#,##0.00"; text-align: center; }
-                </style>
-            </head>
-            <body>
-                <table>
-                    <tr><td colspan="4" class="title">JmsPOS - Staff Meal Allowance Points Directory</td></tr>
-                    <tr><td colspan="4" class="subtitle">Exported Timestamp: ${timestamp}</td></tr>
-                    <tr><td colspan="4"></td></tr>
-                    
-                    <tr class="header-row">
-                        <th style="width: auto; min-width: 150px;">Full Name</th>
-                        <th style="width: 180px;">Employee Barcode / ID</th>
-                        <th style="width: 160px;">Current Points Balance (₱)</th>
-                        <th style="width: 160px;">Monthly Quota (₱)</th>
-                    </tr>`;
-
-            let totalPointsSum = 0;
-            validStaffList.forEach(s => {
-                totalPointsSum += (s.points || 0);
-                htmlTemplate += `
-                    <tr>
-                        <td style="font-weight: bold;" class="text-left">${s.name}</td>
-                        <td style="mso-number-format:\@;">${s.barcode}</td>
-                        <td class="num">${(s.points || 0).toFixed(2)}</td>
-                        <td class="num">${(s.monthlyQuota || 1500).toFixed(2)}</td>
-                    </tr>`;
-            });
-
-            htmlTemplate += `
-                    <tr class="total-row">
-                        <td colspan="2" style="text-align: right; font-weight: bold;">TOTAL REMAINING POINTS POOL:</td>
-                        <td class="num">${totalPointsSum.toFixed(2)}</td>
-                        <td></td>
-                    </tr>
-                </table>
-            </body>
-            </html>`;
-
-            const blob = new Blob([htmlTemplate], { type: 'application/vnd.ms-excel' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `JmsPOS_Staff_Points_Directory_${new Date().toISOString().slice(0,10)}.xls`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-            
-            if(typeof logAudit === 'function') {
-                logAudit('EXPORT STAFF REPORT', 'Exported centered and restricted staff points directory to Excel.');
-            }
-        }
 
         function renderExpensesTable() {
             const tbody = document.getElementById('expenses-table-body');
@@ -2991,47 +2838,45 @@ function closeStaffMealModal() {
 
 
 function handleSaveStaff(e) {
-            e.preventDefault();
-            const id = document.getElementById('edit-staff-id').value;
-            const name = document.getElementById('staff-name').value.trim().toUpperCase();
-            const barcode = document.getElementById('staff-barcode').value.trim();
-            const points = parseFloat(document.getElementById('staff-points').value) || 0;
+    e.preventDefault();
+    const id = document.getElementById('edit-staff-id').value;
+    const name = document.getElementById('staff-name').value.trim().toUpperCase();
+    const barcode = document.getElementById('staff-barcode').value.trim();
+    const points = parseFloat(document.getElementById('staff-points').value) || 0;
 
-            if (!name || !barcode) {
-                alert("Mangyaring punan ang pangalan at barcode!");
-                return;
-            }
+    if (!name || !barcode) {
+        alert("Mangyaring punan ang pangalan at barcode!");
+        return;
+    }
 
-            // Kunin muli ang pinakabagong staffList mula sa localStorage para sigurado
-            staffList = JSON.parse(localStorage.getItem('jmspos_staff')) || defaultStaffList;
+    staffList = JSON.parse(localStorage.getItem('jmspos_staff')) || defaultStaffList;
 
-            if (id) {
-                const staff = staffList.find(s => s.id == id);
-                if (staff) {
-                    staff.name = name;
-                    staff.barcode = barcode;
-                    staff.points = points;
-                    staff.monthlyQuota = points;
-                }
-            } else {
-                const newStaff = {
-                    id: Date.now(),
-                    name: name,
-                    barcode: barcode,
-                    points: points,
-                    monthlyQuota: points
-                };
-                staffList.push(newStaff);
-            }
-
-            // I-save pabalik sa localStorage
-            localStorage.setItem('jmspos_staff', JSON.stringify(staffList));
-            
-            resetStaffForm();
-            renderStaffTable(); // I-refresh ang table display
-            
-            alert("Matagumpay na na-save ang staff points profile!");
+    if (id) {
+        const staff = staffList.find(s => s.id == id);
+        if (staff) {
+            staff.name = name;
+            staff.barcode = barcode;
+            staff.points = points;
+            staff.monthlyQuota = points;
         }
+    } else {
+        const newStaff = {
+            id: Date.now(),
+            name: name,
+            barcode: barcode,
+            points: points,
+            monthlyQuota: points
+        };
+        staffList.push(newStaff);
+    }
+
+    localStorage.setItem('jmspos_staff', JSON.stringify(staffList));
+    
+    resetStaffForm();
+    renderStaffTable(); // <--- MAHALAGA: Tawagin ito para mag-refresh ang UI table
+    
+    alert("Matagumpay na na-save ang staff points profile!");
+}
 
 function importStaffFromCSV(event) {
     const file = event.target.files[0];
@@ -5040,6 +4885,22 @@ function updateChartsData() {
     }
 }
 
+
+function loadStaffTable() {
+    const staffList = JSON.parse(localStorage.getItem('staff_accounts')) || [];
+    const tbody = document.getElementById('staffTableBody'); // Palitan ng tamang ID ng table ninyo
+    tbody.innerHTML = '';
+    
+    staffList.forEach(staff => {
+        const row = `<tr>
+            <td>${staff.name}</td>
+            <td>${staff.barcode}</td>
+            <td>₱${staff.points}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+    });
+}
+
 function renderSalesReports() {
     const startDateVal = document.getElementById('report-start-date').value;
     const endDateVal = document.getElementById('report-end-date').value;
@@ -5487,6 +5348,116 @@ let htmlTemplate = `
         logAudit('EXPORT SALES REPORT', `Exported formatted sales report for date range: ${dateRangeLabel}`);
     }
 }
+function downloadProductTemplate() {
+    let csvContent = "Product Name,Category,Cost Price,Retail Price,Wholesale Price,Stock Qty,Barcode / SKU,Expiry Date,Icon (Emoji)\r\n";
+    csvContent += `"Iced Caramel Macchiato","Beverages",100.00,160.00,140.00,25,"1001","2026-11-30","☕"\r\n`;
+    csvContent += `"Classic Cheeseburger","Meals",140.00,220.00,200.00,12,"1003","2026-10-18","🍔"\r\n`;
+
+    for (let i = 0; i < 50; i++) {
+        csvContent += `,,,,,,,,\r\n`;
+    }
+
+    const blob = new Blob(["\ufeff" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `JmsPOS_Product_Import_Template.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    if(typeof logAudit === 'function') {
+        logAudit('DOWNLOAD TEMPLATE', 'Nag-download ng CSV product import template.');
+    }
+}
+
+// 2. PINATIBAY NA IMPORT PRODUCTS FUNCTION PARA SA CSV / EXCEL
+function importProductsFromExcel(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const text = e.target.result;
+        const rows = text.split(/\r\n|\n/);
+        
+        let importedCount = 0;
+        let updatedCount = 0;
+
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i].trim();
+            if (!row) continue;
+            
+            // Huwag basahin ang header row o mga blangkong linya
+            if (row.toUpperCase().includes('PRODUCT NAME') || row.toUpperCase().includes('BARCODE')) {
+                continue;
+            }
+
+            // Hatiin ang mga kolum gamit ang kuwit (comma) o tab
+            const delimiter = row.includes('\t') ? '\t' : ',';
+            const cols = row.split(delimiter).map(col => col.replace(/^["']|["']$/g, '').trim());
+
+            if (cols.length >= 7 && cols[0] && cols[0] !== "") {
+                const name = cols[0];
+                const category = cols[1] || 'General';
+                const cost = parseFloat(String(cols[2]).replace(/[^\d.]/g, '')) || 0;
+                const price = parseFloat(String(cols[3]).replace(/[^\d.]/g, '')) || 0;
+                const wholesalePrice = parseFloat(String(cols[4]).replace(/[^\d.]/g, '')) || price;
+                const stock = parseInt(String(cols[5]).replace(/[^\d]/g, '')) || 0;
+                const barcode = cols[6] || String(Date.now() + i);
+                const expiry = cols[7] || new Date().toISOString().slice(0, 10);
+                const icon = cols[8] || '📦';
+
+                if (name.toLowerCase() !== 'product name') {
+                    const existingProduct = products.find(p => p.barcode.toLowerCase() === barcode.toLowerCase() || p.name.toLowerCase() === name.toLowerCase());
+                    if (existingProduct) {
+                        existingProduct.name = name;
+                        existingProduct.category = category;
+                        existingProduct.cost = cost;
+                        existingProduct.price = price;
+                        existingProduct.wholesalePrice = wholesalePrice;
+                        existingProduct.stock += stock;
+                        existingProduct.expiry = expiry;
+                        existingProduct.icon = icon || existingProduct.icon;
+                        updatedCount++;
+                    } else {
+                        const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                        products.push({
+                            id: newId,
+                            name: name,
+                            category: category,
+                            cost: cost,
+                            price: price,
+                            wholesalePrice: wholesalePrice,
+                            stock: stock,
+                            barcode: barcode,
+                            expiry: expiry,
+                            icon: icon || '📦'
+                        });
+                        importedCount++;
+                    }
+                }
+            }
+        }
+
+        persistData();
+        renderCategoryFilters();
+        renderProducts();
+        renderInventoryTable();
+        
+        if (typeof logAudit === 'function') {
+            logAudit('IMPORT PRODUCTS', `Nag-import ng ${importedCount} bagong produkto at nag-update ng ${updatedCount}.`);
+        }
+        
+        alert(`Matagumpay na na-import ang mga produkto!\n- Bagong idinagdag: ${importedCount}\n- Na-update ang stock: ${updatedCount}`);
+        event.target.value = '';
+    };
+    reader.readAsText(file);
+}
+
+
+
 
 function switchMobileTab(tab) {
     const productsPanel = document.getElementById('mobile-products-panel');
