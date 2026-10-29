@@ -5540,6 +5540,8 @@ function openMobileCatalogModal() {
             </div>
         `).join('');
     }
+
+
 function switchMobileTab(tab) {
     // Hanapin ang kaliwang column (Products) at kanang column (Cart)
     const productsColumn = document.querySelector('#view-pos > div:nth-child(2)'); // O ang main products wrapper mo
@@ -5570,7 +5572,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (window.innerWidth < 768) {
         switchMobileTab('products');
     }
-});}
+});
 
 
 
