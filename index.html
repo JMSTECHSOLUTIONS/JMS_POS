@@ -151,14 +151,15 @@ body {
         <!-- VIEW 1: POS CASHIER INTERFACE -->
         <div id="view-pos" class="w-full h-full flex flex-col md:flex-row overflow-hidden">
             
-<div class="flex md:hidden gap-2 px-3 pt-2 bg-white border-b border-slate-200 pb-2">
-        <button onclick="switchMobileTab('products')" id="mobile-tab-products" class="flex-1 bg-indigo-600 text-white py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
-            <i class="fa-solid fa-boxes-stacked"></i> All Products
-        </button>
-        <button onclick="switchMobileTab('cart')" id="mobile-tab-cart" class="flex-1 bg-slate-800 text-white py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
-            <i class="fa-solid fa-cart-shopping"></i> Current Order (<span id="mobile-cart-badge">0</span>)
-        </button>
-    </div>
+<!-- MOBILE FIXED SWITCHER BUTTONS (Palaging nakikita sa itaas ng mobile screen) -->
+<div class="flex md:hidden gap-2 px-3 py-2 bg-slate-900 border-b border-slate-800 sticky top-0 z-40 shadow-md">
+    <button onclick="switchMobileTab('products')" id="mobile-tab-products" class="flex-1 bg-indigo-600 text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer">
+        <i class="fa-solid fa-boxes-stacked"></i> All Products
+    </button>
+    <button onclick="switchMobileTab('cart')" id="mobile-tab-cart" class="flex-1 bg-slate-800 text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer">
+        <i class="fa-solid fa-cart-shopping"></i> Current Order (<span id="mobile-cart-badge">0</span>)
+    </button>
+</div>
 
 
             <div class="flex-1 flex flex-col h-full bg-slate-50 border-r border-slate-200 overflow-hidden">
@@ -5540,34 +5541,30 @@ function openMobileCatalogModal() {
         `).join('');
     }
 function switchMobileTab(tab) {
-    const productsView = document.querySelector('#view-pos > div:first-child');
-    const cartView = document.querySelector('#view-pos > div:last-child');
+    // Hanapin ang Products container at Cart container gamit ang kanilang klase o ID
+    // Siguraduhing may tamang ID o class ang iyong dalawang pangunahing column (products column at cart column)
+    const productsColumn = document.querySelector('.flex-1.flex.flex-col.h-full.bg-slate-50'); // O ang katumbas na wrapper ng products sa code mo
+    const cartColumn = document.querySelector('.w-full.md\\:w-\\[420px\\]'); // O ang katumbas na wrapper ng cart sa code mo
+
     const btnProducts = document.getElementById('mobile-tab-products');
     const btnCart = document.getElementById('mobile-tab-cart');
 
-    if (!productsView || !cartView) return;
+    if (!productsColumn || !cartColumn) return;
 
     if (tab === 'products') {
-        productsView.classList.remove('mobile-hidden');
-        cartView.classList.add('mobile-hidden');
-        btnProducts.className = "flex-1 bg-indigo-600 text-white py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer";
-        btnCart.className = "flex-1 bg-slate-800 text-white py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer";
+        productsColumn.classList.remove('hidden', 'md:flex');
+        cartColumn.classList.add('hidden', 'md:flex');
+        
+        btnProducts.className = "flex-1 bg-indigo-600 text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer";
+        btnCart.className = "flex-1 bg-slate-800 text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer";
     } else {
-        productsView.classList.add('mobile-hidden');
-        cartView.classList.remove('mobile-hidden');
-        btnCart.className = "flex-1 bg-indigo-600 text-white py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer";
-        btnProducts.className = "flex-1 bg-slate-800 text-white py-2 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm cursor-pointer";
+        productsColumn.classList.add('hidden', 'md:flex');
+        cartColumn.classList.remove('hidden', 'md:flex');
+        
+        btnCart.className = "flex-1 bg-indigo-600 text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer";
+        btnProducts.className = "flex-1 bg-slate-800 text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow transition-all cursor-pointer";
     }
 }
-
-// I-update din natin ang badge counter ng mobile cart tuwing nagbabago ang cart
-const originalRenderCart = window.renderCart;
-window.renderCart = function() {
-    if (typeof originalRenderCart === 'function') originalRenderCart();
-    const totals = calculateCartTotals();
-    const badge = document.getElementById('mobile-cart-badge');
-    if (badge) badge.innerText = totals.itemCount;
-};
 
 
 
