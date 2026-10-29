@@ -44,40 +44,40 @@ body {
 </head>
 <body class="bg-slate-100 text-slate-800 h-screen flex flex-col overflow-hidden">
 
-    <!-- OPENING SCREEN SLIDESHOW OVERLAY -->
-    <div id="opening-slideshow-screen" onclick="dismissOpeningScreen()" class="fixed inset-0 bg-slate-950 z-[100] flex flex-col items-center justify-center p-6 text-white cursor-pointer transition-all duration-700">
-        <div class="max-w-2xl w-full text-center space-y-6">
-            <div class="inline-flex bg-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-600/30 mb-2">
-                <i class="fa-solid fa-cash-register text-4xl sm:text-5xl"></i>
-            </div>
-            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">Welcome to JmsPOS</h1>
-            <p class="text-slate-400 text-sm sm:text-base">Kasama ang Staff Meal Allowance Points Wallet.</p>
+   <!-- OPENING SCREEN SLIDESHOW OVERLAY (Na-update para sa Android at Desktop) -->
+<div id="opening-slideshow-screen" onclick="dismissOpeningScreen()" class="fixed inset-0 bg-slate-950 z-[100] flex flex-col items-center justify-between sm:justify-center py-10 sm:py-6 px-4 overflow-y-auto sm:overflow-hidden text-white cursor-pointer transition-all duration-700">
+    <div class="max-w-2xl w-full text-center space-y-4 sm:space-y-6 my-auto">
+        <div class="inline-flex bg-indigo-600 p-4 rounded-3xl shadow-lg shadow-indigo-600/30 mb-2">
+            <i class="fa-solid fa-cash-register text-4xl sm:text-5xl"></i>
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">Welcome to JmsPOS</h1>
+        <p class="text-slate-400 text-sm sm:text-base">Kasama ang Staff Meal Allowance Points Wallet.</p>
 
-            <div class="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 h-64 flex flex-col items-center justify-center shadow-2xl overflow-hidden">
-                <div id="slide-1" class="slide-item absolute inset-0 p-8 flex flex-col items-center justify-center text-center transition-opacity duration-1000 opacity-100">
-                    <i class="fa-solid fa-store text-indigo-400 text-4xl mb-3"></i>
-                    <h3 class="text-lg font-bold">Fast Cashier & Barcode Scanner</h3>
-                    <p class="text-xs text-slate-400 mt-2">Mabilis na bentahan gamit ang barcode hardware o mobile camera scanner.</p>
-                </div>
-                <div id="slide-2" class="slide-item absolute inset-0 p-8 flex flex-col items-center justify-center text-center transition-opacity duration-1000 opacity-0">
-                    <i class="fa-solid fa-id-card text-emerald-400 text-4xl mb-3"></i>
-                    <h3 class="text-lg font-bold">Staff Meal Points Wallet</h3>
-                    <p class="text-xs text-slate-400 mt-2">Scan lang ng employee ID barcode para mabawas sa points allowance.</p>
-                </div>
-                <div id="slide-3" class="slide-item absolute inset-0 p-8 flex flex-col items-center justify-center text-center transition-opacity duration-1000 opacity-0">
-                    <i class="fa-solid fa-chart-line text-amber-400 text-4xl mb-3"></i>
-                    <h3 class="text-lg font-bold">Real-time Analytics & Reports</h3>
-                    <p class="text-xs text-slate-400 mt-2">Kumpletong X-Read, Z-Read, at Visual Sales Charts araw-araw.</p>
-                </div>
+        <div class="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 h-60 sm:h-64 flex flex-col items-center justify-center shadow-2xl overflow-hidden">
+            <div id="slide-1" class="slide-item absolute inset-0 p-8 flex flex-col items-center justify-center text-center transition-opacity duration-1000 opacity-100">
+                <i class="fa-solid fa-store text-indigo-400 text-4xl mb-3"></i>
+                <h3 class="text-lg font-bold">Fast Cashier & Barcode Scanner</h3>
+                <p class="text-xs text-slate-400 mt-2">Mabilis na bentahan gamit ang barcode hardware o mobile camera scanner.</p>
             </div>
-
-            <div class="pt-4 animate-bounce">
-                <span class="bg-indigo-600/30 border border-indigo-500/50 text-indigo-300 px-6 py-3 rounded-2xl text-xs sm:text-sm font-semibold shadow-lg">
-                    <i class="fa-solid fa-computer-mouse mr-2"></i> I-click kahit saan o pindutin ang <kbd class="bg-indigo-900 px-2 py-1 rounded text-white font-mono">ENTER</kbd> para mag-login
-                </span>
+            <div id="slide-2" class="slide-item absolute inset-0 p-8 flex flex-col items-center justify-center text-center transition-opacity duration-1000 opacity-0">
+                <i class="fa-solid fa-id-card text-emerald-400 text-4xl mb-3"></i>
+                <h3 class="text-lg font-bold">Staff Meal Points Wallet</h3>
+                <p class="text-xs text-slate-400 mt-2">Scan lang ng employee ID barcode para mabawas sa points allowance.</p>
+            </div>
+            <div id="slide-3" class="slide-item absolute inset-0 p-8 flex flex-col items-center justify-center text-center transition-opacity duration-1000 opacity-0">
+                <i class="fa-solid fa-chart-line text-amber-400 text-4xl mb-3"></i>
+                <h3 class="text-lg font-bold">Real-time Analytics & Reports</h3>
+                <p class="text-xs text-slate-400 mt-2">Kumpletong X-Read, Z-Read, at Visual Sales Charts araw-araw.</p>
             </div>
         </div>
+
+        <div class="pt-2 sm:pt-4 animate-bounce pb-6 sm:pb-0">
+            <span class="bg-indigo-600/30 border border-indigo-500/50 text-indigo-300 px-4 sm:px-6 py-3 rounded-2xl text-xs sm:text-sm font-semibold shadow-lg inline-block">
+                <i class="fa-solid fa-computer-mouse mr-2"></i> I-click kahit saan o pindutin ang <kbd class="bg-indigo-900 px-2 py-1 rounded text-white font-mono">ENTER</kbd> para mag-login
+            </span>
+        </div>
     </div>
+</div>
 
     <header class="bg-slate-900 text-white shadow-md z-20 flex items-center justify-between px-4 sm:px-6 py-3">
         <div class="flex items-center space-x-3">
