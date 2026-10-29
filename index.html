@@ -23,6 +23,9 @@
 
     <style>
 
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 @media (max-width: 768px) {
     .mobile-hidden {
         display: none !important;
@@ -94,39 +97,51 @@ body {
             </div>
         </div>
 
-        <nav class="flex space-x-1 sm:space-x-2 bg-slate-800 p-1 rounded-xl border border-slate-700">
-            <button onclick="switchTab('pos')" id="nav-pos" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all bg-indigo-600 text-white shadow-sm flex items-center space-x-1.5 cursor-pointer">
-                <i class="fa-solid fa-store"></i>
-                <span class="hidden md:inline">Cashier POS</span>
-            </button>
-            <button onclick="switchTab('inventory')" id="nav-inventory" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 flex items-center space-x-1.5 cursor-pointer">
-                <i class="fa-solid fa-boxes-stacked"></i>
-                <span class="hidden md:inline">Inventory</span>
-            </button>
-            <button onclick="switchTab('reports')" id="nav-reports" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 flex items-center space-x-1.5 cursor-pointer">
-                <i class="fa-solid fa-chart-line"></i>
-                <span class="hidden md:inline">Sales Reports</span>
-            </button>
-            <!-- EXPENSES TAB ADD-ON -->
-            <button onclick="switchTab('expenses')" id="nav-expenses" class="px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 flex items-center space-x-1.5 cursor-pointer">
-                <i class="fa-solid fa-wallet text-amber-400"></i>
-                <span class="hidden md:inline">Expenses</span>
-            </button>
-            <!-- ADMIN ONLY: STAFF MEAL WALLET -->
-            <button onclick="openStaffMealModal()" id="nav-staff-meal" class="hidden px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 items-center space-x-1.5 cursor-pointer">
-                <i class="fa-solid fa-id-card"></i>
-                <span class="hidden md:inline">Staff Points</span>
-            </button>
-            <!-- ADMIN ONLY: ATTENDANCE & ACCOUNTS -->
-            <button onclick="openAttendanceModal()" id="nav-attendance" class="hidden px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 items-center space-x-1.5 cursor-pointer">
-                <i class="fa-solid fa-user-clock"></i>
-                <span class="hidden md:inline">Attendance</span>
-            </button>
-            <button onclick="openAdminAccountsModal()" id="nav-manage-accounts" class="hidden px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 items-center space-x-1.5 cursor-pointer">
-                <i class="fa-solid fa-users-gear"></i>
-                <span class="hidden md:inline">Accounts</span>
-            </button>
-        </nav>
+       <nav class="flex space-x-1 sm:space-x-2 bg-slate-800 p-1 rounded-xl border border-slate-700 overflow-x-auto no-scrollbar max-w-full">
+    
+    <!-- 1. Cashier POS -->
+    <button onclick="switchTab('pos')" id="nav-pos" class="flex-shrink-0 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all bg-indigo-600 text-white shadow-sm flex items-center space-x-1.5 cursor-pointer">
+        <i class="fa-solid fa-store"></i>
+        <span class="hidden md:inline">Cashier POS</span>
+    </button>
+
+    <!-- 2. Inventory -->
+    <button onclick="switchTab('inventory')" id="nav-inventory" class="flex-shrink-0 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 flex items-center space-x-1.5 cursor-pointer">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span class="hidden md:inline">Inventory</span>
+    </button>
+
+    <!-- 3. Sales Reports -->
+    <button onclick="switchTab('reports')" id="nav-reports" class="flex-shrink-0 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 flex items-center space-x-1.5 cursor-pointer">
+        <i class="fa-solid fa-chart-line"></i>
+        <span class="hidden md:inline">Sales Reports</span>
+    </button>
+
+    <!-- 4. Expenses -->
+    <button onclick="switchTab('expenses')" id="nav-expenses" class="flex-shrink-0 px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 flex items-center space-x-1.5 cursor-pointer">
+        <i class="fa-solid fa-wallet text-amber-400"></i>
+        <span class="hidden md:inline">Expenses</span>
+    </button>
+
+    <!-- 5. Staff Points -->
+    <button onclick="openStaffMealModal()" id="nav-staff-meal" class="flex-shrink-0 hidden px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 items-center space-x-1.5 cursor-pointer">
+        <i class="fa-solid fa-id-card"></i>
+        <span class="hidden md:inline">Staff Points</span>
+    </button>
+
+    <!-- 6. Attendance -->
+    <button onclick="openAttendanceModal()" id="nav-attendance" class="flex-shrink-0 hidden px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 items-center space-x-1.5 cursor-pointer">
+        <i class="fa-solid fa-user-clock"></i>
+        <span class="hidden md:inline">Attendance</span>
+    </button>
+
+    <!-- 7. Accounts -->
+    <button onclick="openAdminAccountsModal()" id="nav-manage-accounts" class="flex-shrink-0 hidden px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all text-slate-300 hover:text-white hover:bg-slate-700 items-center space-x-1.5 cursor-pointer">
+        <i class="fa-solid fa-users-gear"></i>
+        <span class="hidden md:inline">Accounts</span>
+    </button>
+
+</nav>
 
         <div class="flex items-center space-x-3">
             <div class="text-right hidden lg:block">
