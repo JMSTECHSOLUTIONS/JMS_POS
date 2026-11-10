@@ -29,7 +29,20 @@
     <!-- Chart.js para sa Sales Reports & Analytics -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+    <script>
+        // Chart.js: subukan muna ang sariling kopya (js/chart.umd.min.js), tapos cdnjs, tapos jsDelivr
+        (function () {
+            var srcs = ['js/chart.umd.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js', 'https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js'];
+            function load(i) {
+                if (typeof Chart !== 'undefined' || i >= srcs.length) return;
+                var s = document.createElement('script'); s.src = srcs[i];
+                s.onload = function () { if (typeof Chart === 'undefined') load(i + 1); };
+                s.onerror = function () { load(i + 1); };
+                document.head.appendChild(s);
+            }
+            load(0);
+        })();
+    </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         /* Custom Dot Grid Pattern */
@@ -60,6 +73,11 @@
         }
             #lbImg{max-width:100%;max-height:calc(100vh - 110px);margin:auto;cursor:zoom-in}
         #lbImg.lb-zoom{max-width:none;max-height:none;cursor:zoom-out}
+            /* Page-style navigation: isang page lang ang nakikita, nasa baba palagi ang footer */
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        body > footer { margin-top: auto; }
+        .page-in { animation: pageIn .3s ease both; }
+        @keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased selection:bg-mkpRed selection:text-white">
@@ -77,7 +95,7 @@
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <!-- Logo -->
-            <a href="#" class="flex items-center space-x-3 group">
+            <a href="#home" class="flex items-center space-x-3 group">
                 <div class="w-12 h-12 bg-gradient-to-tr from-mkpRed to-mkpDarkRed rounded-xl flex items-center justify-center text-white shadow-md group-hover:scale-105 transition">
                     <i class="fa-solid fa-truck-moving text-2xl"></i>
                 </div>
@@ -305,7 +323,7 @@
                         <div class="w-14 h-14 bg-red-100 text-mkpRed rounded-2xl flex items-center justify-center text-2xl group-hover:bg-mkpRed group-hover:text-white transition">
                             <i class="fa-solid fa-boxes-stacked"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900">Equipment</h3>
+                        <h3 class="text-xl font-bold text-slate-900">Equipment Delivery</h3>
                         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                             Dependable transportation for businesses, retailers, suppliers, and commercial clients requiring general goods and merchandise delivery.
                         </p>
@@ -381,7 +399,7 @@
                         <div class="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center text-2xl group-hover:bg-mkpRed transition">
                             <i class="fa-solid fa-hard-hat"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900">Business Client Services</h3>
+                        <h3 class="text-xl font-bold text-slate-900">For Business Clients</h3>
                         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
                             Reliable logistics support for construction suppliers and contractors moving building materials to project locations.
                         </p>
@@ -662,6 +680,12 @@
                             <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white">
                                 <img src="images/partner-chosen-easy-vendo.jpg" alt="Chosen Easy Vendo" loading="lazy" class="w-full aspect-square object-cover">
                             </div>
+                            <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white">
+                                <img src="images/partner-dehumidifier-ph.jpg" alt="Dehumidifier PH" loading="lazy" class="w-full aspect-square object-cover">
+                            </div>
+                            <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-sm bg-white">
+                                <img src="images/partner-competitive-card-solutions.jpg" alt="Competitive Card Solutions" loading="lazy" class="w-full aspect-square object-cover">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -927,8 +951,9 @@
                         <option value="">Lahat ng Status</option>
                         <option>Pending</option><option>Confirmed</option><option>Dispatched</option><option>In-Transit</option><option>Completed</option><option>Cancelled</option>
                     </select>
-                    <button onclick="refreshBookings()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl cursor-pointer"><i class="fa-solid fa-rotate"></i> I-refresh</button>
+                    <button onclick="refreshBookingsView()" class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl cursor-pointer"><i class="fa-solid fa-rotate"></i> I-refresh</button>
                 </div>
+                <div class="bg-sky-50 border border-sky-100 text-sky-800 rounded-2xl px-4 py-3 text-xs flex items-start gap-2"><i class="fa-solid fa-circle-info mt-0.5"></i><p><strong>Paano gumagana:</strong> 1) Pumili ng <strong>Driver / Truck</strong> sa booking. 2) Kapag ginawang <strong>Confirmed</strong> (o Dispatched / In-Transit), awtomatikong magiging <strong>On-Trip</strong> ang truck sa <strong>Fleet</strong>. 3) Kapag <strong>Completed</strong>, <strong>Cancelled</strong> o ibinalik sa <strong>Pending</strong>, awtomatikong <strong>Available</strong> ulit ang truck.</p></div>
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs sm:text-sm border-collapse">
@@ -939,6 +964,7 @@
                                     <th class="p-3">Ruta</th>
                                     <th class="p-3">Service / Truck</th>
                                     <th class="p-3">Petsa</th>
+                                    <th class="p-3">Driver / Truck</th>
                                     <th class="p-3">Status</th>
                                     <th class="p-3 text-right">Presyo (₱)</th>
                                     <th class="p-3 text-right">Action</th>
@@ -988,19 +1014,19 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
                         <h4 class="font-bold text-slate-800 text-sm mb-3">Revenue Trend</h4>
-                        <canvas id="chart-revenue" height="200"></canvas>
+                        <div class="relative h-64"><canvas id="chart-revenue"></canvas></div>
                     </div>
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
                         <h4 class="font-bold text-slate-800 text-sm mb-3">Bookings by Status</h4>
-                        <canvas id="chart-status" height="200"></canvas>
+                        <div class="relative h-64"><canvas id="chart-status"></canvas></div>
                     </div>
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
                         <h4 class="font-bold text-slate-800 text-sm mb-3">Bookings by Service Type</h4>
-                        <canvas id="chart-service" height="200"></canvas>
+                        <div class="relative h-64"><canvas id="chart-service"></canvas></div>
                     </div>
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
                         <h4 class="font-bold text-slate-800 text-sm mb-3">Bookings by Truck Type</h4>
-                        <canvas id="chart-truck" height="200"></canvas>
+                        <div class="relative h-64"><canvas id="chart-truck"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -1195,9 +1221,9 @@
   "dims": "21 x 7.5 x 7.5 ft (L x H x W)",
   "folder": "6 WHEELER FORWARD WING VAN WITH AUTOMATIC LIFTER - 21  x 7.5 x 7.5 ft. (L x H x W)",
   "images": [
-   "890410515_1019524131017487_2103895596508697719_n.jpg",
-   "891926184_1387777120099943_1284473052503212571_n.jpg",
-   "893178974_1523603173150368_2556478387480779533_n.jpg"
+   "1.jpg",
+   "2.jpg",
+   "3.jpg"
   ]
  },
  {
@@ -1291,7 +1317,8 @@
             updateTruckPreview();
             closeTruckPicker();
             showBookingForm();
-            $('contact').scrollIntoView({ behavior: 'smooth' });
+            goPage('contact');
+            ($('bookingForm').parentElement || $('contact')).scrollIntoView({ behavior: 'smooth' });
             showToast('Truck Selected', t.name + ' - please fill out the booking form.');
         }
 
@@ -1644,7 +1671,7 @@
                 <div class="p-4 sm:p-6 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         ${card('fa-user', 'Client', row('Name', E(b.clientName)) + row('Phone', `<a href="tel:${E(b.clientPhone)}" class="text-mkpRed underline">${E(b.clientPhone)}</a>`) + row('Email', b.clientEmail ? `<a href="mailto:${E(b.clientEmail)}" class="text-mkpRed underline">${E(b.clientEmail)}</a>` : '-'))}
-                        ${card('fa-calendar-day', 'Schedule & Price', row('Preferred Date of Pickup', E(pd)) + row('Quoted Price', E(peso(b.quotedPrice))) + row('Mode of Payment', E(b.paymentMode || '-')) + row('Confirmation Email', b.confirmationSentAt ? 'Sent ' + E(dt(b.confirmationSentAt)) : 'Not sent'))}
+                        ${card('fa-calendar-day', 'Schedule & Price', row('Preferred Date of Pickup', E(pd)) + row('Quoted Price', E(peso(b.quotedPrice))) + row('Mode of Payment', E(b.paymentMode || '-')) + row('Driver / Truck', driverSelectHtml(b, true)) + row('Confirmation Email', b.confirmationSentAt ? 'Sent ' + E(dt(b.confirmationSentAt)) : 'Not sent'))}
                     </div>
                     ${card('fa-route', 'Trip', row('Pick-up Address', E(b.pickupLoc) + pin(b.pickupPin)) + row('Drop-off Address', E(b.dropoffLoc) + pin(b.dropoffPin)) + `<a href="${route}" target="_blank" rel="noopener" class="inline-block mt-3 bg-slate-900 hover:bg-slate-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl"><i class="fa-solid fa-diamond-turn-right mr-1"></i>Open route in Google Maps</a>`)}
                     ${card('fa-truck', 'Service & Equipment',
@@ -1689,11 +1716,21 @@
         // ===================== FLEET MANAGER =====================
         let allFleet = [];
         const FLEET_BADGE = { 'Available': 'bg-emerald-100 text-emerald-700', 'On-Trip': 'bg-amber-100 text-amber-700', 'Maintenance': 'bg-red-100 text-red-700' };
+        let fleetLoaded = false;
+        async function fetchFleet() {
+            try { allFleet = (await (await fbReady).list('fleet')).sort((a, b) => String(a.unitId).localeCompare(String(b.unitId), undefined, { numeric: true })); fleetLoaded = true; }
+            catch (e) { showToast('Fleet', 'Hindi ma-load. Siguraduhing na-publish ang bagong Firestore rules.'); }
+        }
         async function loadFleet() {
             $('fleetModels').innerHTML = TRUCKS.map(t => `<option value="${escapeHtml(t.name)}">`).join('');
-            try { allFleet = (await (await fbReady).list('fleet')).sort((a, b) => String(a.unitId).localeCompare(String(b.unitId), undefined, { numeric: true })); }
-            catch (e) { showToast('Fleet', 'Hindi ma-load. Siguraduhing na-publish ang bagong Firestore rules.'); }
+            await fetchFleet();
             renderFleet();
+        }
+        async function refreshBookingsView() { await refreshBookings(); await fetchFleet(); renderBookingsTable(); renderDashboardCards(); renderOngoingList(); showToast('Na-refresh', 'Updated na ang mga booking at ang Fleet.'); }
+        function fleetTripHtml(f) {
+            const bk = f.status === 'On-Trip' && f.bookingId ? allBookings.find(x => x.id === f.bookingId) : null;
+            if (!bk) return f.status === 'On-Trip' ? '<div class="text-xs text-slate-400">Walang naka-link na booking (manual na On-Trip).</div>' : '';
+            return `<div class="bg-amber-50 border border-amber-100 rounded-xl p-3"><p class="text-xs text-amber-700 font-bold"><i class="fa-solid fa-truck-fast mr-1"></i>Current Trip</p><p class="font-semibold text-slate-800 text-sm mt-1">${escapeHtml(bk.id)} &middot; ${escapeHtml(bk.clientName)}</p><p class="text-xs text-slate-500">${escapeHtml(bk.pickupLoc)} &rarr; ${escapeHtml(bk.dropoffLoc)}</p><p class="text-xs text-slate-400 mt-0.5">${escapeHtml(bookingDateKey(bk))} &middot; ${escapeHtml(bk.status)}</p></div>`;
         }
         function renderFleet() {
             const lbl = 'text-xs text-slate-400';
@@ -1704,6 +1741,7 @@
                         <div><p class="${lbl}">Truck Model / Type</p><p class="font-semibold text-slate-800">${escapeHtml(f.model)}</p></div>
                         <div><p class="${lbl}">Assigned Driver</p><p class="font-semibold text-slate-800"><i class="fa-solid fa-id-card text-mkpRed mr-1"></i>${escapeHtml(f.driver)}</p></div>
                         <div><p class="${lbl}">Current Location / Base</p><p class="font-semibold text-slate-800"><i class="fa-solid fa-location-dot text-emerald-500 mr-1"></i>${escapeHtml(f.location)}</p></div>
+                        ${fleetTripHtml(f)}
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                         <select onchange="setFleetStatus('${f.id}', this.value)" class="text-xs border border-slate-300 rounded-lg p-2 bg-slate-50">${['Available', 'On-Trip', 'Maintenance'].map(s => `<option ${s === f.status ? 'selected' : ''}>${s}</option>`).join('')}</select>
@@ -1723,12 +1761,12 @@
             e.preventDefault();
             const id = $('fl-id').value || 'FLT-' + Date.now().toString(36).toUpperCase(), old = allFleet.find(x => x.id === id), now = new Date().toISOString();
             const data = { unitId: $('fl-unit').value.trim().slice(0, 30), model: $('fl-model').value.trim().slice(0, 80), driver: $('fl-driver').value.trim().slice(0, 60),
-                location: $('fl-loc').value.trim().slice(0, 80), status: $('fl-status').value, createdAt: (old && old.createdAt) || now, updatedAt: now };
+                location: $('fl-loc').value.trim().slice(0, 80), status: $('fl-status').value, bookingId: (old && old.bookingId) || '', createdAt: (old && old.createdAt) || now, updatedAt: now };
             try { await (await fbReady).add('fleet', id, data); $('fleetForm').classList.add('hidden'); await loadFleet(); showToast('Fleet', 'Na-save ang truck unit.'); }
             catch (err) { showToast('Hindi Na-save', 'May error: ' + (err.code || err.message)); }
         }
         async function setFleetStatus(id, status) {
-            try { await (await fbReady).patch('fleet', id, { status, updatedAt: new Date().toISOString() }); const f = allFleet.find(x => x.id === id); if (f) f.status = status; renderFleet(); }
+            try { const upd = { status, updatedAt: new Date().toISOString() }; if (status !== 'On-Trip') upd.bookingId = ''; await (await fbReady).patch('fleet', id, upd); const f = allFleet.find(x => x.id === id); if (f) Object.assign(f, upd); renderFleet(); renderBookingsTable(); }
             catch (err) { showToast('Hindi Na-save', 'May error: ' + (err.code || err.message)); }
         }
         async function deleteFleet(id) {
@@ -1916,7 +1954,7 @@
             });
             if (tab === 'dashboard') { renderDashboardCards(); renderOngoingList(); }
             if (tab === 'fleet') loadFleet();
-            if (tab === 'bookings') renderBookingsTable();
+            if (tab === 'bookings') { renderBookingsTable(); fetchFleet().then(renderBookingsTable); }
             if (tab === 'calendar') renderCalendar();
             if (tab === 'analytics') { if (!document.getElementById('an-start-date').value) setAnalyticsQuickFilter('all'); else renderAnalytics(); }
             if (tab === 'expenses') renderExpensesTable();
@@ -1973,7 +2011,7 @@
                 <div class="p-4 flex flex-wrap items-center justify-between gap-3 hover:bg-slate-50">
                     <div class="min-w-0">
                         <p class="font-bold text-slate-900">${escapeHtml(b.clientName)} <span class="font-normal text-slate-400">&middot; ${escapeHtml(b.clientPhone)}</span></p>
-                        <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-mkpRed"></i> ${escapeHtml(b.pickupLoc)} &rarr; ${escapeHtml(b.dropoffLoc)} &middot; ${escapeHtml(b.truckType)} &middot; ${escapeHtml(bookingDateKey(b))}</p>
+                        <p class="text-xs text-slate-500 mt-0.5"><i class="fa-solid fa-location-dot text-mkpRed"></i> ${escapeHtml(b.pickupLoc)} &rarr; ${escapeHtml(b.dropoffLoc)} &middot; ${escapeHtml(b.truckType)} &middot; ${escapeHtml(bookingDateKey(b))}${bookingDriverText(b) ? ' &middot; <i class="fa-solid fa-id-card text-mkpRed"></i> ' + escapeHtml(bookingDriverText(b)) : ''}</p>
                     </div>
                     <span class="text-[10px] font-bold px-2.5 py-1 rounded-full ${STATUS_COLORS[b.status] || 'bg-slate-100 text-slate-700'}">${escapeHtml(b.status)}</span>
                 </div>`).join('');
@@ -1993,7 +2031,7 @@
 
             const tbody = document.getElementById('bk-table-body');
             if (list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">Walang nahanap na booking.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-8 text-slate-400">Walang nahanap na booking.</td></tr>`;
                 return;
             }
             tbody.innerHTML = list.map(b => `
@@ -2003,6 +2041,7 @@
                     <td class="p-3 text-slate-600">${escapeHtml(b.pickupLoc)} &rarr; ${escapeHtml(b.dropoffLoc)}</td>
                     <td class="p-3 text-slate-600">${escapeHtml(b.serviceType)}<br><span class="text-slate-400">${escapeHtml(b.truckType)}</span>${Number(b.helpers) > 0 ? `<br><span class="text-slate-500">+ ${Number(b.helpers)} helper(s)</span>` : ''}${bookingExtras(b)}${b.notes ? `<br><span class="block max-w-[220px] truncate italic text-slate-400" title="${escapeHtml(b.notes)}">${escapeHtml(b.notes)}</span>` : ''}</td>
                     <td class="p-3 text-slate-600">${escapeHtml(bookingDateKey(b))}</td>
+                    <td class="p-3">${driverSelectHtml(b)}${bookingUnit(b) && bookingUnit(b).bookingId === b.id && bookingUnit(b).status === 'On-Trip' ? '<p class="mt-1"><span class="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700"><i class="fa-solid fa-truck-fast mr-1"></i>On-Trip</span></p>' : ''}</td>
                     <td class="p-3">
                         <select onchange="saveBookingField('${b.id}','status',this.value)" class="text-xs border border-slate-300 rounded-lg p-1.5 bg-slate-50">${statusOptions(b.status)}</select>
                     </td>
@@ -2016,12 +2055,77 @@
                 </tr>`).join('');
         }
 
+        // ---------- DRIVER / TRUCK <-> FLEET ----------
+        function bookingUnit(b) { return b && b.unitId ? allFleet.find(f => f.id === b.unitId) || null : null; }
+        function bookingDriverText(b) {
+            const u = bookingUnit(b);
+            if (u) return `${u.driver || 'No driver'} (${u.unitId})`;
+            return b.driver ? `${b.driver}${b.unitLabel ? ' (' + b.unitLabel + ')' : ''}` : '';
+        }
+        function unitBlocked(u, bookingId) {
+            if (!u) return '';
+            if (u.status === 'Maintenance') return `Ang ${u.unitId} ay nasa Maintenance.`;
+            if (u.status === 'On-Trip' && u.bookingId !== bookingId) return `Ang ${u.unitId} ay On-Trip pa${u.bookingId ? ' sa ' + u.bookingId : ''}.`;
+            return '';
+        }
+        async function fleetOccupy(u, bookingId) {
+            const upd = { status: 'On-Trip', bookingId, updatedAt: new Date().toISOString() };
+            await (await fbReady).patch('fleet', u.id, upd); Object.assign(u, upd);
+        }
+        async function fleetRelease(u, bookingId) {
+            if (!u || u.bookingId !== bookingId) return false;
+            const upd = { status: 'Available', bookingId: '', updatedAt: new Date().toISOString() };
+            await (await fbReady).patch('fleet', u.id, upd); Object.assign(u, upd);
+            return true;
+        }
+        function driverSelectHtml(b, modal) {
+            const E = escapeHtml, u = bookingUnit(b);
+            const opts = allFleet.map(f => {
+                const maint = f.status === 'Maintenance', busy = f.status === 'On-Trip' && f.bookingId !== b.id, mine = f.id === b.unitId;
+                const note = maint ? ' - Maintenance' : busy ? ' - On-Trip' : '';
+                return `<option value="${E(f.id)}" ${mine ? 'selected' : ''} ${(maint || busy) && !mine ? 'disabled' : ''}>${E(f.unitId)} · ${E(f.driver || 'No driver')} · ${E(f.model)}${note}</option>`;
+            }).join('');
+            const gone = b.unitId && !u ? `<option value="${E(b.unitId)}" selected disabled>${E(b.unitLabel || b.unitId)} · ${E(b.driver || '')} (wala na sa Fleet)</option>` : '';
+            const call = modal ? `assignUnit('${E(b.id)}', this.value).then(() => viewBooking('${E(b.id)}'))` : `assignUnit('${E(b.id)}', this.value)`;
+            return `<select onchange="${call}" class="text-xs border ${b.unitId ? 'border-slate-300' : 'border-amber-400'} rounded-lg p-1.5 bg-slate-50 max-w-[220px]"><option value="">- Select driver -</option>${gone}${opts}</select>${allFleet.length || !fleetLoaded ? '' : '<p class="text-[11px] text-slate-400 mt-1">Magdagdag muna ng truck sa Fleet tab.</p>'}`;
+        }
+        async function assignUnit(bookingId, unitId) {
+            const b = allBookings.find(x => x.id === bookingId); if (!b) return;
+            if ((b.unitId || '') === (unitId || '')) return;
+            const unit = unitId ? allFleet.find(f => f.id === unitId) : null, prev = bookingUnit(b), active = ONGOING_STATUSES.includes(b.status);
+            if (unit && active) {
+                const why = unitBlocked(unit, b.id);
+                if (why) { showToast('Hindi Magamit ang Truck', why + ' Pumili ng ibang truck.'); renderBookingsTable(); return; }
+            }
+            try {
+                const upd = { unitId: unit ? unit.id : '', unitLabel: unit ? unit.unitId : '', driver: unit ? (unit.driver || '') : '', updatedAt: new Date().toISOString() };
+                await (await fbReady).patch('bookings', b.id, upd); Object.assign(b, upd);
+                if (active) {
+                    if (prev && (!unit || prev.id !== unit.id)) await fleetRelease(prev, b.id);
+                    if (unit) await fleetOccupy(unit, b.id);
+                }
+                showToast(unit ? 'Driver Na-assign' : 'Driver Tinanggal', unit ? `${unit.unitId} · ${unit.driver || 'walang driver'} ang naka-assign.${active ? ' On-Trip na sa Fleet.' : ' I-Confirm ang booking para maging On-Trip.'}` : 'Wala nang driver ang booking na ito.');
+            } catch (err) { showToast('Hindi Na-save', 'May error: ' + (err.code || err.message)); }
+            renderBookingsTable(); renderFleet(); renderOngoingList();
+        }
+
         async function saveBookingField(id, field, value) {
             const body = {};
             body[field] = field === 'quotedPrice' ? Number(value) : value;
+            const cur = allBookings.find(b => b.id === id);
+            let unit = null, becameActive = false, becameInactive = false;
             if (field === 'status' && value === 'Confirmed') {
-                const cur = allBookings.find(b => b.id === id);
                 if (!cur || !(Number(cur.quotedPrice) > 0)) { showToast('Walang Presyo', 'Maglagay muna ng quoted price bago i-Confirm ang booking.'); renderBookingsTable(); return; }
+            }
+            if (field === 'status' && cur) {
+                const was = ONGOING_STATUSES.includes(cur.status), will = ONGOING_STATUSES.includes(value);
+                unit = bookingUnit(cur); becameActive = will && !was; becameInactive = was && !will;
+                if (becameActive) {
+                    if (!cur.unitId) { showToast('Walang Driver', 'Pumili muna ng Driver / Truck sa booking bago ito i-Confirm.'); renderBookingsTable(); return; }
+                    if (!unit) { showToast('Wala na ang Truck', 'Wala na sa Fleet ang napiling truck. Pumili ulit ng Driver / Truck.'); renderBookingsTable(); return; }
+                    const why = unitBlocked(unit, cur.id);
+                    if (why) { showToast('Hindi Magamit ang Truck', why + ' Pumili ng ibang truck, o i-Complete muna ang kasalukuyang trip.'); renderBookingsTable(); return; }
+                }
             }
             try {
                 const res = await mkpFetch(`/api/bookings/${encodeURIComponent(id)}`, {
@@ -2032,6 +2136,13 @@
                 const idx = allBookings.findIndex(b => b.id === id);
                 if (idx >= 0) allBookings[idx] = data.booking;
                 if (field === 'status' && value === 'Confirmed') sendConfirmationEmail(data.booking);
+                if (field === 'status' && unit) {
+                    try {
+                        if (becameActive) { await fleetOccupy(unit, id); showToast('Fleet Updated', `${unit.unitId} · ${unit.driver || 'driver'} ay On-Trip na sa Fleet.`); }
+                        else if (becameInactive && await fleetRelease(unit, id)) showToast('Fleet Updated', `Available na ulit ang ${unit.unitId}.`);
+                    } catch (err) { showToast('Fleet Hindi Na-update', 'Na-save ang booking pero hindi na-update ang Fleet: ' + (err.code || err.message)); }
+                    renderBookingsTable(); renderFleet();
+                }
                 renderDashboardCards(); renderOngoingList();
             } catch (err) { /* session-expired na hinawakan */ }
         }
@@ -2041,6 +2152,8 @@
             try {
                 const res = await mkpFetch(`/api/bookings/${encodeURIComponent(id)}`, { method: 'DELETE' });
                 if (res.ok) {
+                    const gone = allBookings.find(b => b.id === id), gu = gone && bookingUnit(gone);
+                    if (gu) { try { await fleetRelease(gu, id); renderFleet(); } catch (e) { /* ok */ } }
                     allBookings = allBookings.filter(b => b.id !== id);
                     renderBookingsTable(); renderDashboardCards(); renderOngoingList();
                 }
@@ -2110,7 +2223,7 @@
             const addons = [Number(b.helpers) > 0 ? b.helpers + ' helper' + (Number(b.helpers) > 1 ? 's' : '') : '', b.jackPallet ? 'Jack Pallet' : '', Number(b.floors) > 0 ? b.floors + ' floor' + (Number(b.floors) > 1 ? 's' : '') : ''].filter(Boolean).join(', ') || 'None';
             const rows = [
                 ['Client', (b.clientName || '-') + (b.clientPhone ? '  |  ' + b.clientPhone : '')],
-                ['Service', b.serviceType || '-'], ['Truck', b.truckType || '-'],
+                ['Service', b.serviceType || '-'], ['Truck', b.truckType || '-'], ['Driver', bookingDriverText(b) || '-'],
                 ['Pick-up', b.pickupLoc || '-'], ['Drop-off', b.dropoffLoc || '-'],
                 ['Add-ons', addons], ['Payment', b.paymentMode || '-'],
                 ['Price', Number(b.quotedPrice) > 0 ? peso(b.quotedPrice) : 'Not yet quoted'],
@@ -2251,6 +2364,7 @@
                 card('Completion Rate', completionRate + '%', 'text-emerald-600') +
                 card('Avg. Booking Value', peso(avgValue), 'text-mkpBlue');
 
+            if (typeof Chart === 'undefined') { showToast('Charts Unavailable', 'The chart library could not be loaded. Check your internet connection or add js/chart.umd.min.js.'); return; }
             // ----- Revenue trend (ayon sa araw, Completed bookings lang) -----
             const revByDay = {};
             completed.forEach(b => { const k = bookingDateKey(b); revByDay[k] = (revByDay[k] || 0) + (Number(b.quotedPrice) || 0); });
@@ -2259,7 +2373,7 @@
             chartInstances.revenue = new Chart(document.getElementById('chart-revenue'), {
                 type: 'line',
                 data: { labels: days, datasets: [{ label: 'Revenue', data: days.map(d => revByDay[d]), borderColor: '#dc2626', backgroundColor: 'rgba(220,38,38,0.1)', fill: true, tension: 0.3 }] },
-                options: { responsive: true, plugins: { legend: { display: false } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
 
             // ----- Bookings by Status -----
@@ -2270,7 +2384,7 @@
             chartInstances.status = new Chart(document.getElementById('chart-status'), {
                 type: 'doughnut',
                 data: { labels: Object.keys(byStatus), datasets: [{ data: Object.values(byStatus), backgroundColor: ['#94a3b8', '#38bdf8', '#f59e0b', '#f97316', '#10b981', '#f43f5e'] }] },
-                options: { responsive: true }
+                options: { responsive: true, maintainAspectRatio: false }
             });
 
             // ----- Bookings by Service Type -----
@@ -2280,7 +2394,7 @@
             chartInstances.service = new Chart(document.getElementById('chart-service'), {
                 type: 'bar',
                 data: { labels: Object.keys(byService), datasets: [{ label: 'Bookings', data: Object.values(byService), backgroundColor: '#1e3a8a' }] },
-                options: { responsive: true, plugins: { legend: { display: false } }, indexAxis: 'y' }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, indexAxis: 'y' }
             });
 
             // ----- Bookings by Truck Type -----
@@ -2290,7 +2404,7 @@
             chartInstances.truck = new Chart(document.getElementById('chart-truck'), {
                 type: 'bar',
                 data: { labels: Object.keys(byTruck), datasets: [{ label: 'Bookings', data: Object.values(byTruck), backgroundColor: '#f97316' }] },
-                options: { responsive: true, plugins: { legend: { display: false } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
 
@@ -2424,6 +2538,33 @@
             patch: (c, id, data) => updateDoc(doc(db, c, id), data),
             del: (c, id) => deleteDoc(doc(db, c, id))
         });
+    </script>
+    <script>
+        // ===================== PAGE-STYLE NAVIGATION =====================
+        // Isang page lang ang makikita sa bawat pagpindot sa menu. Ang #feedback ay kasama ng Why Choose Us.
+        const PAGES = { 'home': ['home'], 'about': ['about'], 'services': ['services'], 'why-us': ['why-us', 'feedback'], 'contact': ['contact'] };
+        const PAGE_SECTIONS = ['home', 'about', 'services', 'why-us', 'feedback', 'contact'];
+        let currentPage = null;
+        function pageFromHash() { let h = location.hash.slice(1); if (h === 'feedback') h = 'why-us'; return PAGES[h] ? h : null; }
+        function showPage(name) {
+            if (!PAGES[name]) name = 'home';
+            PAGE_SECTIONS.forEach(id => {
+                const el = document.getElementById(id); if (!el) return;
+                const on = PAGES[name].includes(id);
+                el.classList.toggle('hidden', !on);
+                if (on && currentPage !== name) { el.classList.remove('page-in'); void el.offsetWidth; el.classList.add('page-in'); }
+            });
+            document.querySelectorAll('header.sticky nav a[href^="#"], #mobileMenu a.block[href^="#"]').forEach(a => {
+                const on = a.getAttribute('href') === '#' + name;
+                a.style.color = on ? '#dc2626' : ''; a.style.fontWeight = on ? '700' : '';
+            });
+            currentPage = name;
+            const mm = document.getElementById('mobileMenu'); if (mm) mm.classList.add('hidden');
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        }
+        function goPage(name) { if (location.hash !== '#' + name) location.hash = '#' + name; showPage(name); }
+        window.addEventListener('hashchange', () => { const p = pageFromHash(); if (p && p !== currentPage) showPage(p); });
+        (function initPages() { const p = pageFromHash(); if (p) showPage(p); else { showPage('home'); history.replaceState(null, '', '#home'); } })();
     </script>
 </body>
 </html>
